@@ -1,0 +1,37 @@
+#### azure #####
+
+codigos para poder hacer funcionar laravel al iniciar el server
+
+
+cd home
+cd site
+cd wwwroot
+
+apt install unzip
+unzip composer.zip
+
+
+
+apt update
+apt install wget php-cli php-zip unzip
+apt install wget php-cli
+
+wget -O composer-setup.php https://getcomposer.org/installer
+php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+composer --version
+
+apt install nodejs
+apt install npm
+apt install git-all
+
+ln -s public public_html
+
+cd /etc/nginx
+cd sites-enabled
+nano default
+service nginx restart
+
+
+Manual importante para que la api funciones
+
+https://azureossd.github.io/2022/04/22/PHP-Laravel-deploy-on-App-Service-Linux-copy/index.html

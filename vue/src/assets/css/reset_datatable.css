@@ -1,0 +1,39 @@
+th:nth-child(2){
+    width: 16% !important;
+}
+
+th:nth-child(3){
+    width: 16% !important;
+}
+
+th:nth-child(4){
+    width: 16% !important;
+}
+
+th:nth-child(5){
+    width: 4% !important;
+}
+
+th:nth-child(6){
+    width: 4% !important;
+}
+
+th:nth-child(7){
+    width: 4% !important;
+}
+
+th:nth-child(8){
+    width: 10% !important;
+}
+
+th:nth-child(9){
+    width: 10% !important;
+}
+
+th:nth-child(10){
+    width:10% !important;
+}
+
+th:nth-child(11){
+    width: 10% !important;
+}

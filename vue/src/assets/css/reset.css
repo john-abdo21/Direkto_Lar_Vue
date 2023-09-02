@@ -1,0 +1,34 @@
+.text-left:nth-child(1){
+    width: 15%;
+}
+
+.text-left:nth-child(2){
+    width: 15%;
+}
+
+.text-left:nth-child(3){
+    width: 15%;
+}
+
+.text-left:nth-child(4){
+    width: 15%;
+}
+
+.text-left:nth-child(5){
+    width: 20%;
+}
+
+.text-left:nth-child(6){
+    width: 20%;
+}
+
+.project_form1{
+    display: flex;
+    align-items: center;
+}
+
+.project_form2{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
