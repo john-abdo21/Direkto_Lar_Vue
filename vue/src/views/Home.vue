@@ -15,26 +15,21 @@
       <div class="text-[14px] font-thin text-left">
         <div>
           <label class="font-bold">Proyocto</label>
-          <select id="filter1" name="filter1" class="border border-gray-400 w-[100px] pt-1 rounded-lg ml-4 my-1">
-            <option value="apple">201-MAZ</option>
-            <option value="banana">2</option>
-            <option value="orange">3</option>
+          <select id="filter1" name="filter1" class="border border-gray-400 w-[130px] pt-1 rounded-lg ml-4 my-1" :value="selectedFilter1"
+            v-bind:onChange="filter1">
+            <option v-for="(item, index) in projectList" :value="index" :key="index">{{ item }}</option>
           </select>
         </div>
         <div>
           <label class="font-bold">Fronto</label>
-          <select id="filter2" name="filter2" class="border border-gray-400 w-[100px] pt-1 rounded-lg ml-4 my-1">
-            <option value="1">Ninguno</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
+          <select id="filter2" name="filter2" class="border border-gray-400 w-[100px] pt-1 rounded-lg ml-4 my-1" :value="selectedFilter1">
+            <option v-for="(item, index) in codeproject" :value="index" :key="index">{{ item }}</option>
           </select>
         </div>
         <div>
           <label class="font-bold">Faso</label>
-          <select id="filter3" name="filter3" class="border border-gray-400 w-[100px] pt-1 rounded-lg ml-4 my-1">
-            <option value="1">Ninuno</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
+          <select id="filter2" name="filter2" class="border border-gray-400 w-[100px] pt-1 rounded-lg ml-4 my-1" :value="selectedFilter1">
+            <option v-for="(item, index) in codeproject" :value="index" :key="index">{{ item }}</option>
           </select>
         </div>
 
@@ -82,7 +77,6 @@
 
     </div>
   </div>
-
   <div class="flex gap-2 text-center">
     <div class="w-3/12">
       <div class="border border-gray-400 py-1">
@@ -125,9 +119,7 @@
 import ConfirmMultiple from "../components/ConfirmMultiple.vue";
 import store from "../store";
 import Breadcrumb from "../components/Layout/Breadcrumb.vue";
-import VueApexCharts from 'vue-apexcharts'
 import ApexCharts from 'apexcharts'
-import { intersection } from "lodash";
 export default {
   name: "white-project-component",
   components: {
@@ -137,6 +129,10 @@ export default {
   data: function () {
     return {
       modalName: "",
+      projectList: [],
+      codeproject: [],
+      datas: [],
+      selectedFilter1: 0,
       infoProyectos: [],
       firstLogueo: 0,
       restrictionsu: [],
@@ -147,9 +143,7 @@ export default {
         date_conciliad: "F, conciliada",
         date_required: "D, requerida",
       },
-
       states: {},
-
       options2: {
         series: [{
           name: 'EN RROCESO',
@@ -212,7 +206,6 @@ export default {
           offsetX: 0
         }
       },
-
       options1: {
         series: [
           {
@@ -282,11 +275,10 @@ export default {
         },
         legend: {
           position: 'right',
-          align:'left',
+          align: 'left',
           offsetY: 40
         }
       },
-
       options3: {
         series: [{
           data: [156, 74]
@@ -317,7 +309,6 @@ export default {
         }
       }
     }
-
   },
   methods: {
     getMonth(data) {
@@ -346,7 +337,6 @@ export default {
 
     confirmChanges: function (info) {
       store.dispatch('update_projects_without_approve', info).then(res => {
-        console.log(res)
         if (res.data.estado == true) {
 
           this.closeModal();
@@ -368,96 +358,118 @@ export default {
       await store.dispatch("getNameProy").then((response) => {
         this.nameProyecto = response;
       });
+      const constraintid = sessionStorage.getItem('constraintid')
+      const constraintNameProy = sessionStorage.getItem('constraintNameProy')
+      this.selectedFilter1 = sessionStorage.getItem('selectedFilter')?sessionStorage.getItem('selectedFilter'):0
+      if (!constraintid && !constraintNameProy) {
+        sessionStorage.setItem('constraintid', this.codeproject[this.selectedFilter1])
+        sessionStorage.setItem('constraintNameProy', this.projectList[this.selectedFilter1])
+      }
       await store.dispatch("get_datos_restricciones").then((response) => {
-        const resDataForState = response.estados
-        const resDataForBars = response.restricciones
-        let states = []
-        resDataForState.forEach(element => {
-          states.push(element.desEstado)
-        });
-        let datas = []
-        let responsables = []
-        resDataForBars.forEach(item => {
-          let data = item.listaFase[0].listaRestricciones
-          if (data.length) {
-            data.map(d => {
-              if (responsables.indexOf(d.desUsuarioResponsable) == -1) {
-                responsables.unshift(d.desUsuarioResponsable)
+      });
+      const resDataForState = this.$store.state.anaEstado
+      const resDataForBars = this.$store.state.whiteproject_rows
+      let states = []
+      resDataForState.forEach(element => {
+        states.push(element.desEstado)
+      });
+      let datas = []
+      let responsables = []
+      resDataForBars.forEach(item => {
+        let data = item.listaFase[0].listaRestricciones
+        if (data.length) {
+          data.map(d => {
+            if (responsables.indexOf(d.desUsuarioResponsable) == -1) {
+              responsables.unshift(d.desUsuarioResponsable)
+            }
+            datas.unshift(d)
+          })
+        }
+      })
+      const currentYear = new Date(datas[0].dayFechaIdentificacion)
+      const year = currentYear.getFullYear();
+      const months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Ago',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ]
+      let option1Categories = []
+      for (let m = 0; m < 12; m++) {
+        option1Categories.push(`${months[m]} ${year}`)
+      }
+      // set
+      this.options3.xaxis.categories = states
+      this.options2.xaxis.categories = responsables
+      this.options1.xaxis.categories = option1Categories
+      if (datas) {
+        let statevalue = []
+        let responsablevalue = []
+        let restricionesvalue = []
+        for (let i = 0; i < states.length; i++) {
+          responsablevalue[i] = { name: states[i], data: [] }
+          restricionesvalue[i] = { name: states[i], data: [] }
+        }
+        datas.map(item => {
+          for (let i = 0; i < states.length; i++) {
+            if (item.desEstadoActividad == states[i]) {
+              for (let j = 0; j < responsables.length; j++) {
+                if (responsablevalue[i].data[j] == null || responsablevalue[i].data[j] == undefined)
+                  responsablevalue[i].data[j] = 0
+                if (item.desUsuarioResponsable == responsables[j])
+                  responsablevalue[i].data[j]++
               }
-              datas.unshift(d)
-            })
+              // option1
+              for (let k = 0; k < months.length; k++) {
+                if (restricionesvalue[i].data[k] == null || restricionesvalue[i].data[k] == undefined)
+                  restricionesvalue[i].data[k] = 0
+                if (this.getMonth(item.dayFechaIdentificacion) == k + 1)
+                  restricionesvalue[i].data[k]++
+              }
+              if (statevalue[i] == null)
+                statevalue[i] = 1
+              else
+                statevalue[i]++
+            }
           }
         })
-        const currentYear = new Date(datas[0].dayFechaIdentificacion)
-        const year = currentYear.getFullYear();
-        const months = [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Ago',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec'
-        ]
-        let option1Categories = []
-        for (let m = 0; m < 12; m++) {
-          option1Categories.push(`${months[m]} ${year}`)
-        }
         // set
-        this.options3.xaxis.categories = states
-        this.options2.xaxis.categories = responsables
-        this.options1.xaxis.categories = option1Categories
-        if (datas) {
-          let statevalue = []
-          let responsablevalue = []
-          let restricionesvalue = []
-          for (let i = 0; i < states.length; i++) {
-            responsablevalue[i] = { name: states[i], data: [] }
-            restricionesvalue[i] = { name: states[i], data: [] }
-          }
-          datas.map(item => {
-            for (let i = 0; i < states.length; i++) {
-              if (item.desEstadoActividad == states[i]) {
-                for (let j = 0; j < responsables.length; j++) {
-                  if (responsablevalue[i].data[j] == null || responsablevalue[i].data[j] == undefined)
-                    responsablevalue[i].data[j] = 0
-                  if (item.desUsuarioResponsable == responsables[j])
-                    responsablevalue[i].data[j]++
-                }
-                // option1
-                for (let k = 0; k < months.length; k++) {
-                  if (restricionesvalue[i].data[k] == null || restricionesvalue[i].data[k] == undefined)
-                    restricionesvalue[i].data[k] = 0
-                  if (this.getMonth(item.dayFechaIdentificacion) == k)
-                    restricionesvalue[i].data[k]++
-                }
-                if (statevalue[i] == null)
-                  statevalue[i] = 1
-                else
-                  statevalue[i]++
-              }
-            }
-          })
-          // set
-          this.options3.series[0].data = statevalue
-          this.options2.series = responsablevalue
-          this.options1.series = restricionesvalue
-        }
-        this.restrictionsu = response.restricciones[0].listaFase[0].listaRestricciones
-      });
-    },
+        this.options3.series[0].data = statevalue
+        this.options2.series = responsablevalue
+        this.options1.series = restricionesvalue
+        this.restrictionsu = resDataForBars[0].listaFase[0].listaRestricciones
+      }
+      var chart1 = new ApexCharts(document.querySelector("#chart1"), this.options1);
+      chart1.render();
+      var chart2 = new ApexCharts(document.querySelector("#chart2"), this.options2);
+      chart2.render();
+      var chart3 = new ApexCharts(document.querySelector("#chart3"), this.options3);
+      chart3.render();
 
+    },
+    async filter1(e) {
+      sessionStorage.setItem('constraintid', this.codeproject[e.target.value])
+      sessionStorage.setItem('constraintNameProy', this.projectList[e.target.value])
+      sessionStorage.setItem('selectedFilter',  e.target.value)
+      window.location.reload()
+      this.callMounted()
+    },
 
   },
   mounted: async function () {
-    sessionStorage.setItem('constraintid', 1)
-    sessionStorage.setItem('constraintNameProy', 'Proyecto 001')
-    //  store.dispatch('get_infoPerson');
+    await store.dispatch('get_restrictions').then((response) => {
+    });
+    let projects = this.$store.state.restriction_rows_real;
+    this.projectList = projects.map(item => { return item.desnombreproyecto });
+    this.codeproject = projects.map(item => { return item.codProyecto });
     this.firstLogueo = this.$store.state.user.firstLogin;
     await this.callMounted();
     await this.getPendings();
@@ -465,12 +477,6 @@ export default {
       this.modalName = 'ConfirmMultiple'
       console.log(">>> entramos ConfirmMultiple")
     }
-    var chart1 = new ApexCharts(document.querySelector("#chart1"), this.options1);
-    chart1.render();
-    var chart2 = new ApexCharts(document.querySelector("#chart2"), this.options2);
-    chart2.render();
-    var chart3 = new ApexCharts(document.querySelector("#chart3"), this.options3);
-    chart3.render();
   },
   computed: {
     // proyectoPendientes: function() {
@@ -484,26 +490,4 @@ export default {
     // }
   }
 }
-
-
-
-// import { computed, ref } from "vue";
-// import { useRoute } from "vue-router";
-// import { useStore } from "vuex";
-
-// const route = useRoute();
-// const store = useStore();
-// if (window.localStorage) {
-
-//   if (!localStorage.getItem('reload')) {
-//       localStorage['reload'] = true;
-//       window.location.reload();
-//   } else {
-//       localStorage.removeItem('reload');
-//   }
-// }
-/* store.dispatch('get_project')
-.catch((error) => {
-  console.log(error)
-}); */
 </script>
