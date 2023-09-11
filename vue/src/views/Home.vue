@@ -15,20 +15,31 @@
       <div class="text-[14px] font-thin text-left">
         <div>
           <label class="font-bold">Proyocto</label>
-          <select id="filter1" name="filter1" class="border border-gray-400 w-[130px] pt-1 rounded-lg ml-4 my-1" :value="selectedFilter1"
-            v-bind:onChange="filter1">
+          <select id="filter1" name="filter1" class="border border-gray-400 w-[130px] pt-1 rounded-lg ml-4 my-1"
+            :value="selectedFilter1" v-bind:onChange="filter1">
             <option v-for="(item, index) in projectList" :value="index" :key="index">{{ item }}</option>
           </select>
         </div>
         <div>
-          <label class="font-bold">Fronto</label>
-          <select id="filter2" name="filter2" class="border border-gray-400 w-[100px] pt-1 rounded-lg ml-4 my-1" :value="selectedFilter1">
-            <option v-for="(item, index) in codeproject" :value="index" :key="index">{{ item }}</option>
-          </select>
+          <label class="font-bold">Estado</label>
+          <!-- <select multiple="true" id="filter2" name="filter2" class="border w-[130px] border-gray-400 pt-1 rounded-lg ml-4 my-1" :value="selectedFilter1">
+            <option v-for="(item, index) in states" :value="index" :key="index">{{ item }}</option>
+          </select> -->
+          <!-- <input type="color" multiple="true" id="filter2" name="filter2" class="border w-[130px] border-gray-400 pt-1 rounded-lg ml-4 my-1" :value="selectedFilter1" /> -->
+          <div v-for="(item, index) in states" :key="index" @click="stateChanged(index)">
+            <div class="flex ml-4 cursor-pointer" @click="statefilter[item] = !statefilter[item]">
+              <div class="px-2 h-[18px]"
+                :class="statefilter[item] ? 'bg-gray-400' : index == 0 ? 'bg-[#008ffb]' : index == 1 ? 'bg-[#00e396]' : 'bg-[#feb019]'">
+              </div>
+              <option :value="index" :class="statefilter[item] ? 'text-gray-400' : ''">{{ item }}</option>
+            </div>
+          </div>
+
         </div>
         <div>
-          <label class="font-bold">Faso</label>
-          <select id="filter2" name="filter2" class="border border-gray-400 w-[100px] pt-1 rounded-lg ml-4 my-1" :value="selectedFilter1">
+          <label class="font-bold">Fronto</label>
+          <select id="filter2" name="filter2" class="border border-gray-400 w-[100px] pt-1 rounded-lg ml-4 my-1"
+            :value="selectedFilter1">
             <option v-for="(item, index) in codeproject" :value="index" :key="index">{{ item }}</option>
           </select>
         </div>
@@ -133,6 +144,9 @@ export default {
       codeproject: [],
       datas: [],
       selectedFilter1: 0,
+      statefilter: [],
+      buttonStateBot: false,
+      clickState: null,
       infoProyectos: [],
       firstLogueo: 0,
       restrictionsu: [],
@@ -145,21 +159,24 @@ export default {
       },
       states: {},
       options2: {
-        series: [{
-          name: 'EN RROCESO',
-          data: [44, 55, 41, 37, 22, 43, 21]
-        }, {
-          name: 'LEMANTADA',
-          data: [53, 32, 33, 52, 13, 43, 32]
-        }, {
-          name: 'POR INCIAR',
-          data: [12, 17, 11, 9, 15, 11, 20]
-        }],
         chart: {
           type: 'bar',
           height: 250,
           stacked: true,
         },
+        series: [{
+          name: 'Pendiente',
+          data: [44, 55, 41, 37, 22, 43, 21]
+        }, {
+          name: 'Proceso',
+          data: [53, 32, 33, 52, 13, 43, 32]
+        }, {
+          name: 'Completado',
+          data: [12, 17, 11, 9, 15, 11, 20]
+        }],
+        colors: [
+          '#008ffb', '#00e396', '#feb019'
+        ],
         plotOptions: {
           bar: {
             horizontal: true,
@@ -207,28 +224,31 @@ export default {
         }
       },
       options1: {
-        series: [
-          {
-            name: 'EN PROCESO',
-            group: 'budget',
-            data: [44000, 55000, 41000, 67000, 22000, 43000]
-          },
-          {
-            name: 'LEWANTADA',
-            group: 'budget',
-            data: [48000, 50000, 40000, 65000, 25000, 40000]
-          },
-          {
-            name: 'POR INOAR',
-            group: 'budget',
-            data: [13000, 36000, 20000, 8000, 13000, 27000]
-          }
-        ],
         chart: {
           type: 'bar',
           height: 200,
           stacked: true,
         },
+        series: [
+          {
+            name: 'Pendiente',
+            group: 'budget',
+            data: [44000, 55000, 41000, 67000, 22000, 43000]
+          },
+          {
+            name: 'Proceso',
+            group: 'budget',
+            data: [48000, 50000, 40000, 65000, 25000, 40000]
+          },
+          {
+            name: 'Completado',
+            group: 'budget',
+            data: [13000, 36000, 20000, 8000, 13000, 27000]
+          }
+        ],
+        colors: [
+          '#008ffb', '#00e396', '#feb019'
+        ],
         stroke: {
           width: 1,
           colors: ['#fff']
@@ -265,7 +285,6 @@ export default {
         fill: {
           opacity: 1
         },
-        colors: ['#3498db', '#301cd9', '#dd7318'],
         yaxis: {
           labels: {
             formatter: (val) => {
@@ -280,13 +299,16 @@ export default {
         }
       },
       options3: {
+        chart: {
+          type: 'bar',
+          height: 250,
+          events: {
+            dataPointSelection: this.dataPointSelection
+          }
+        },
         series: [{
           data: [156, 74]
         }],
-        chart: {
-          type: 'bar',
-          height: 250
-        },
         plotOptions: {
           bar: {
             dataLabels: {
@@ -300,8 +322,7 @@ export default {
             return val;
           },
           style: {
-            fontSize: '12px',
-            colors: ["#ffffff"]
+            fontSize: '12px'
           }
         },
         xaxis: {
@@ -338,7 +359,6 @@ export default {
     confirmChanges: function (info) {
       store.dispatch('update_projects_without_approve', info).then(res => {
         if (res.data.estado == true) {
-
           this.closeModal();
           this.handleRedirect('proyectos')
           //  this.infoProyectos = res.data.datos
@@ -353,6 +373,29 @@ export default {
         }
       });
     },
+    dataPointSelection: function (event, chartContext, config) {
+      if (this.clickState === config.dataPointIndex) {
+        this.buttonStateBot = true
+        this.clickState=null
+      } else {
+        this.clickState = config.dataPointIndex
+        this.buttonStateBot = false
+      }
+      let datas1 = this.options1.series
+      let datas2 = this.options2.series
+      let colors = ['#008ffb', '#00e396', '#feb019']
+      if (!this.buttonStateBot) {
+        colors = colors[config.dataPointIndex]
+        datas1 = this.options1.series.filter(data => data.name === this.states[config.dataPointIndex])
+        datas2 = this.options2.series.filter(data => data.name === this.states[config.dataPointIndex])
+      }
+      this.$nextTick(() => {
+        this.chart1.updateSeries(datas1);
+        this.chart1.updateOptions({ colors: colors });
+        this.chart2.updateSeries(datas2);
+        this.chart2.updateOptions({ colors: colors });
+      });
+    },
     callMounted: async function () {
       await store.dispatch("get_infoPerson");
       await store.dispatch("getNameProy").then((response) => {
@@ -360,7 +403,7 @@ export default {
       });
       const constraintid = sessionStorage.getItem('constraintid')
       const constraintNameProy = sessionStorage.getItem('constraintNameProy')
-      this.selectedFilter1 = sessionStorage.getItem('selectedFilter')?sessionStorage.getItem('selectedFilter'):0
+      this.selectedFilter1 = sessionStorage.getItem('selectedFilter') ? sessionStorage.getItem('selectedFilter') : 0
       if (!constraintid && !constraintNameProy) {
         sessionStorage.setItem('constraintid', this.codeproject[this.selectedFilter1])
         sessionStorage.setItem('constraintNameProy', this.projectList[this.selectedFilter1])
@@ -373,6 +416,7 @@ export default {
       resDataForState.forEach(element => {
         states.push(element.desEstado)
       });
+      this.states = states
       let datas = []
       let responsables = []
       resDataForBars.forEach(item => {
@@ -447,22 +491,40 @@ export default {
         this.options1.series = restricionesvalue
         this.restrictionsu = resDataForBars[0].listaFase[0].listaRestricciones
       }
-      var chart1 = new ApexCharts(document.querySelector("#chart1"), this.options1);
-      chart1.render();
-      var chart2 = new ApexCharts(document.querySelector("#chart2"), this.options2);
-      chart2.render();
-      var chart3 = new ApexCharts(document.querySelector("#chart3"), this.options3);
-      chart3.render();
+      this.chart1 = new ApexCharts(document.querySelector("#chart1"), this.options1);
+      this.chart1.render();
+      this.chart2 = new ApexCharts(document.querySelector("#chart2"), this.options2);
+      this.chart2.render();
+      this.chart3 = new ApexCharts(document.querySelector("#chart3"), this.options3);
+      this.chart3.render();
 
     },
     async filter1(e) {
       sessionStorage.setItem('constraintid', this.codeproject[e.target.value])
       sessionStorage.setItem('constraintNameProy', this.projectList[e.target.value])
-      sessionStorage.setItem('selectedFilter',  e.target.value)
+      sessionStorage.setItem('selectedFilter', e.target.value)
       window.location.reload()
       this.callMounted()
     },
-
+    stateChanged(index) {
+      let datas1 = this.options1.series
+      let datas2 = this.options2.series
+      let colors = ['#008ffb', '#00e396', '#feb019']
+      Object.keys(this.statefilter).map(item => {
+        if (this.statefilter[item]) {
+          console.log('T', item);
+          colors.splice(index, 1)
+          datas1 = this.options1.series.filter(data => data.name !== item)
+          datas2 = this.options2.series.filter(data => data.name !== item)
+        }
+      })
+      this.$nextTick(() => {
+        this.chart1.updateSeries(datas1);
+        this.chart1.updateOptions({ colors: colors });
+        this.chart2.updateSeries(datas2);
+        this.chart2.updateOptions({ colors: colors });
+      });
+    },
   },
   mounted: async function () {
     await store.dispatch('get_restrictions').then((response) => {
