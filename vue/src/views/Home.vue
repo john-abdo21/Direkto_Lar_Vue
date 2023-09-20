@@ -1,8 +1,10 @@
 <template>
-  <Breadcrumb
-  :paths="['Inicio']"
-   />
-  <div>Bienvenidos</div>
+   <Breadcrumb
+      :paths="['Inicio', 'Dashboard']"
+      :urls ="['home']"
+      :settingFlag="false"
+      :class="status === 4 ? 'hidden' : 'm-1'"
+    />
   <Dashboad />
 </template>
 
