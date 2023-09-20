@@ -58,7 +58,6 @@
 
 
 <script>
-import { emit } from "process";
 import ClickOutside from "vue-click-outside";
 import Tooltip from "./Tooltip.vue";
 import { useRouter } from "vue-router";

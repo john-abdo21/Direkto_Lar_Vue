@@ -1,45 +1,98 @@
 <template>
+  <Breadcrumb :paths="['Inicio']" />
+  <slot></slot>
   <div>
-    <BarChart2
-      :tipo = 1
-      :chartData="barData"
-      :chartOptions="barOptions"
-      :periodos = graph2_data
-      :filterHidden = filterHidden
-      @emitFilters="updateFilters"
-      @removeFilters="removeFilters"
-      :width  = "'400'"
-      :height = "'300'"
+  <div class="flex gap-2 text-center">
+    <div class="w-2/12">
+      <div class=" border border-gray-400 py-1 px-2 mb-2">
+        Filtros
+      </div>
+      <div class="text-[14px] font-thin text-left">
+        <div>
+          <label class="font-bold">Proyocto</label>
+          <select id="filter1" name="filter1" class="border border-gray-400 w-[130px] pt-1 rounded-lg ml-4 my-1"
+            :value="selectedFilter1" v-bind:onChange="filter1">
+            <option v-for="(item, index) in projectList" :value="index" :key="index">{{ item }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="font-bold">Fronto</label>
+          <select id="filter2" name="filter2" class="border border-gray-400 w-[100px] pt-1 rounded-lg ml-4 my-1"
+            :value="selectedFilter1"  v-bind:onChange="filter1">
+            <option v-for="(item, index) in codeproject" :value="index" :key="index">{{ item }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="font-bold">Fasa</label>
+          <select id="filter2" name="filter2" class="border border-gray-400 w-[100px] pt-1 rounded-lg ml-4 my-1"
+            :value="selectedFilter1"  v-bind:onChange="filter1">
+            <option v-for="(item, index) in codeproject" :value="index" :key="index">{{ item }}</option>
+          </select>
+        </div>
 
+      </div>
+    </div>
+    <div class="w-7/12">
+      <div class=" border border-gray-400 py-1 px-2">
+        Evolucion Semanal de Cant. Restriciones x Estado
+      </div>
+      <BarChart2 :tipo=1 :chartData="barData" :chartOptions="barOptions" :periodos=graph2_data :filterHidden=filterHidden
+        @emitFilters="updateFilters" @removeFilters="removeFilters" :width="'100%'" :height="'200px'" />
+    </div>
+    <div class="w-3/12">
+      <div class=" border border-gray-400 py-1 px-2 mb-2">
+        Leyenda
+      </div>
+      <div class="flex justify-between items-center">
+        <div class="w-[80px] h-[15px] bg-[#00e396]"></div>
+        <div class="text-[12px] text-gray-600">
+          En Proceso
+        </div>
+      </div>
+      <div class="flex justify-between items-center">
+        <div class="w-[80px] h-[15px] bg-[#008ffb]"></div>
+        <div class="text-[12px] text-gray-600">
+          Levantada
+        </div>
+      </div>
+      <div class="flex justify-between items-center">
+        <div class="w-[80px] h-[15px] bg-[#feb019]"></div>
+        <div class="text-[12px] text-gray-600">
+          Por Iniciar
+        </div>
+      </div>
+      <div class="border border-gray-400 py-1 px-2 my-2">
+        Indicaciones
+      </div>
+      <div class="text-left flex flex-col font-thin text-[14px]" style="width:100%">
+        <div class="flex">
+          1.<div class="pl-2">De click dentro de los graficos para poder filtar en los demas.</div>
+        </div>
+        <div class="flex">
+          2.<div class="pl-2">Use los Filtro para elegr el el Proyecto.</div>
+        </div>
+      </div>
 
-    />
-    <BarChart2
-      :tipo = 2
-      :chartData="barDataByState"
-      :chartOptions="barOptionsByState"
-      :periodos = []
-      :filterHidden = filterHidden
-      @emitFilters="updateFilters"
-      @removeFilters="removeFilters"
-      :width  = "'200'"
-      :height = "'200'"
-    />
+    </div>
+  </div>
+  <div class="flex gap-2 text-center">
+    <div class="w-3/12">
+      <div class="border border-gray-400 py-1">
+        Cant. Restricciones x Estado
+      </div>
+      <BarChart2 :tipo=2 :chartData="barDataByState" :chartOptions="barOptionsByState" :periodos=[]
+        :filterHidden=filterHidden @emitFilters="updateFilters" @removeFilters="removeFilters" :width="'200'"
+        :height="'250px'" />
+    </div>
+    <div class="w-5/12">
+      <div class=" border border-gray-400 py-1 px-2">
+        Cant. Restricciones x Responsables x Estado
+      </div>
+      <BarChart2 :tipo=3 :chartData="barDatabyResponsable" :chartOptions="barOptions2" :periodos=graph2_data
+        :filterHidden=filterHidden @emitFilters="updateFilters" @removeFilters="removeFilters" :width="'400'"
+        :height="'250px'" />
 
-    <BarChart2
-      :tipo = 3
-      :chartData="barDatabyResponsable"
-      :chartOptions="barOptions2"
-      :periodos = graph2_data
-      :filterHidden = filterHidden
-      @emitFilters="updateFilters"
-      @removeFilters="removeFilters"
-      :width  = "'400'"
-      :height = "'300'"
-
-
-    />
-
-
+    </div>
     <div class="w-6/12">
       <div class=" border border-gray-400 py-1 px-2">
         Detalle de Restricciones
@@ -53,65 +106,68 @@
             <tr v-for="(item, index) in rawData" :id="index">
               <td>{{ item['desActividad'] }}</td>
               <td>{{ item['desTipoRestriccion'] }}</td>
-              <td>{{ item['responsable'] }}</td>
-              <td>{{ item['dayFechaConciliada'] }}</td>
-              <td>{{ item['fecha'] }}</td>
+              <td>{{ item['desUsuarioResponsable'] }}</td>
+              <td>{{ item['dayFechaRequerida'] }}</td>
+              <td>{{ item['dayFechaIdentificacion'] }}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-
+  </div>
   </div>
 </template>
 
 <script>
 import BarChart2 from '../views/BarChart2.vue'; // Asegúrate de que la ruta sea correcta
 import { mapState } from 'vuex';
-
+import store from "../store";
 export default {
   components: {
     BarChart2,
   },
   data() {
     return {
-      rawDataInicial: [
-        {id: 1, fecha: '2023/01/01', estado: 'completado', responsable : 'Diego Warthon', desActividad : 'Encofrado', desTipoRestriccion: 'Arquitectura', dayFechaConciliada: '2020-10-12'},
-        {id: 2, fecha: '2023/01/01', estado: 'completado', responsable : 'Diego Warthon', desActividad : 'Enchape', desTipoRestriccion: 'Arquitectura', dayFechaConciliada: '2020-10-12'},
-        {id: 3, fecha: '2023/01/05', estado: 'En proceso', responsable : 'Javier Melendez', desActividad : 'Enchape', desTipoRestriccion: 'Arquitectura', dayFechaConciliada: '2020-10-12'},
-        {id: 4, fecha: '2023/01/05', estado: 'Pendiente', responsable : 'Juan Perez', desActividad : 'Encofrado 2', desTipoRestriccion: 'Arquitectura', dayFechaConciliada: '2020-10-12'},
-        {id: 5, fecha: '2023/01/08', estado: 'Pendiente', responsable : 'Juan Perez', desActividad : 'Cimentacion', desTipoRestriccion: 'Arquitectura', dayFechaConciliada: '2020-10-12'},
-
-        {id: 6, fecha: '2023/02/09', estado: 'Pendiente', responsable : 'Diego Warthon', desActividad : 'Cimentacion', desTipoRestriccion: 'Construccion', dayFechaConciliada: '2020-10-12'},
-        {id: 7, fecha: '2023/02/10', estado: 'En proceso', responsable : 'Juan Perez', desActividad : 'Cimentacion', desTipoRestriccion: 'Construccion', dayFechaConciliada: '2020-10-12'},
-        {id: 8, fecha: '2023/02/10', estado: 'En proceso', responsable : 'Javier Melendez', desActividad : 'Cimentacion', desTipoRestriccion: 'Construccion', dayFechaConciliada: '2020-10-12'},
-        {id: 9, fecha: '2023/02/11', estado: 'completado', responsable : 'Diego Warthon', desActividad : 'Techo', desTipoRestriccion: 'Construccion', dayFechaConciliada: '2020-10-12'},
-        {id: 10, fecha: '2023/02/11', estado: 'completado', responsable : 'Javier Melendez', desActividad : 'Techo', desTipoRestriccion: 'Construccion', dayFechaConciliada: '2020-10-12'}
-      ],
-      rawDataColor:{
-        'Pendiente': "#cccccc",
-        'En proceso': "#e56b37",
-        'completado': "#3ac189",
-
+      rawDataInicial: [],
+      rawDataColor: {
+        'Pendiente': "#008ffb",
+        'Proceso': "#00e396",
+        'Completado': "#feb019",
       },
+      codeproject: [],
+
+      selectedFilter1: 0,
+      statefilter: [],
       orderedColors: [],
-      graph2_data : [],
+      graph2_data: [],
       barData: {},
       barDataByState: {},
-      filterEstado:undefined,
-      filterPeriodo:undefined,
-      filterResponsable:undefined,
-      filterHidden:false,
+      filterEstado: undefined,
+      filterPeriodo: undefined,
+      filterResponsable: undefined,
+      filterHidden: false,
       headerCols: {
         exercise: "Actividad",
         restriction: "Restricción",
-        responsible: "Responsable",
+        responsible: "desUsuarioResponsable",
         date_conciliad: "F.Conciliada",
         date_required: "D.Requerida",
       },
     };
   },
-  mounted() {
+  async mounted() {
+    await store.dispatch('get_restrictions').then((response) => {
+    });
+    let projects = this.$store.state.restriction_rows_real;
+    this.projectList = projects.map(item => { return item.desnombreproyecto });
+    this.codeproject = projects.map(item => { return item.codProyecto });
+    this.firstLogueo = this.$store.state.user.firstLogin;
+    await this.callMounted();
+    await this.getPendings();
+    if (this.infoProyectos.length > 0) {
+      this.modalName = 'ConfirmMultiple'
+      console.log(">>> entramos ConfirmMultiple")
+    }
     this.orderColors();
   },
   computed: {
@@ -121,129 +177,126 @@ export default {
       let filtered = this.rawDataInicial;
 
       if (this.filterEstado !== undefined) {
-        filtered = filtered.filter(item => item.estado === this.filterEstado);
+        filtered = filtered.filter(item => item.desEstadoActividad === this.filterEstado);
       }
 
       if (this.filterPeriodo !== undefined) {
 
         filtered = filtered.filter(item => {
-          const date = new Date(item.fecha).getYearAndMonthNumber();
+          const date = new Date(item.dayFechaIdentificacion).getYearAndMonthNumber();
           return date == this.filterPeriodo
         });
       }
-
-
-      if (this.filterResponsable !== undefined ) {
-         filtered = filtered.filter(item => item.responsable.toLowerCase().includes(this.filterResponsable.toLowerCase()));
+      if (this.filterResponsable !== undefined) {
+        filtered = filtered.filter(item => item.desUsuarioResponsable.toLowerCase().includes(this.filterResponsable.toLowerCase()));
       }
-
       // console.log(filtered)
-
       return filtered;
     },
 
     uniqueResponsables() {
-      const responsable = this.rawData.map(item => item.responsable);
+      const responsable = this.rawData.map(item => item.desUsuarioResponsable);
       const uniqueResponsables = [...new Set(responsable)];
       return uniqueResponsables;
     },
 
 
     uniqueStates() {
-      const states = this.rawData.map(item => item.estado);
+      const states = this.rawData.map(item => item.desEstadoActividad);
       const uniqueStates = [...new Set(states)];
       return uniqueStates;
     },
 
     groupedByResponsable() {
-    const groups    = {};
-    const statesSet = new Set();
+      const groups = {};
+      const statesSet = new Set();
 
-    this.rawData.forEach(row => {
-      // Lógica para determinar la semana (esto es un ejemplo)
-      const responsable  =  row.responsable; // `${new Date(row.responsable).getWeek()}`;
-    //   const month = `${new Date(row.responsable).getYearAndMonthNumber()}`;
+      this.rawData.forEach(row => {
+        // Lógica para determinar la semana (esto es un ejemplo)
+        const responsable = row.desUsuarioResponsable; // `${new Date(row.responsable).getWeek()}`;
+        //   const month = `${new Date(row.responsable).getYearAndMonthNumber()}`;
 
-      if (!groups[responsable]) {
-        groups[responsable]            = {};
-        groups[responsable]['data']    = {};
-        // groups[week]['periodo'] = month;
-      }
-
-
-      if (!groups[responsable]['data'][row.estado]) {
-          groups[responsable]['data'][row.estado] = 0 // [row.estado] = 0;
-
-      }
-
-      groups[responsable]['data'][row.estado]++;
-      statesSet.add(row.estado);
-    });
-
-    console.log(">>> vemos el final de las condiocoones")
-    console.log(groups)
-
-    for (const responsable in groups) {
-      // console.log(`Semana ||| : ${semana}`);
-      // console.log(groups[semana]['periodo'])
-      // this.graph2_data.push(groups[responsable]['periodo'])
-
-      this.uniqueStates.forEach((estado) => {
-        if (groups[responsable]['data'][estado] == undefined){
-          groups[responsable]['data'][estado] = 0
+        if (!groups[responsable]) {
+          groups[responsable] = {};
+          groups[responsable]['data'] = {};
+          // groups[week]['periodo'] = month;
         }
 
+
+        if (!groups[responsable]['data'][row.desEstadoActividad]) {
+          groups[responsable]['data'][row.desEstadoActividad] = 0 // [row.desEstadoActividad] = 0;
+
+        }
+
+        groups[responsable]['data'][row.desEstadoActividad]++;
+        statesSet.add(row.desEstadoActividad);
       });
 
-    }
+      console.log(">>> vemos el final de las condiocoones")
+      console.log(groups)
 
-    // this.availableStates = [...statesSet];
+      for (const responsable in groups) {
+        // console.log(`Semana ||| : ${semana}`);
+        // console.log(groups[semana]['periodo'])
+        // this.graph2_data.push(groups[responsable]['periodo'])
+
+        this.uniqueStates.forEach((desEstadoActividad) => {
+          if (groups[responsable]['data'][desEstadoActividad] == undefined) {
+            groups[responsable]['data'][desEstadoActividad] = 0
+          }
+
+        });
+
+      }
+
+      // this.availableStates = [...statesSet];
 
 
-    const data = {}
-    data['responsables']  = groups
+      const data = {}
+      data['responsables'] = groups
 
-    console.log('>>>>>>>>> aqui vemos que tal los responsables')
-    console.log(groups)
+      console.log('>>>>>>>>> aqui vemos que tal los responsables')
+      console.log(groups)
 
-    return data;
+      return data;
     },
 
 
 
     groupedByWeek() {
-      const groups    = {};
-      const groups_m  = {};
+      const groups = {};
+      const groups_m = {};
       const statesSet = new Set();
 
       this.rawData.forEach(row => {
         // Lógica para determinar la semana (esto es un ejemplo)
-        const week = `Sem. ${new Date(row.fecha).getWeek()}`;
-        const month = `${new Date(row.fecha).getYearAndMonthNumber()}`;
+        const week = `Sem. ${new Date(row.dayFechaIdentificacion).getWeek()}`;
+        console.log(week);
+        const month = `${new Date(row.dayFechaIdentificacion).getYearAndMonthNumber()}`;
 
         if (!groups[week]) {
-          groups[week]            = {};
-          groups[week]['data']    = {};
+          groups[week] = {};
+          groups[week]['data'] = {};
           groups[week]['periodo'] = month;
         }
         if (!groups_m[month]) groups_m[month] = {};
 
         // if (!groups_m[month]){
-          if (groups_m?.[month]?.[week] == undefined) {
-            groups_m[month][week] = 1
-            // groups_m[month][week]['mes'] = 1
-            // groups_m[month][week]['anio'] = 1
-          }
+        if (groups_m?.[month]?.[week] == undefined) {
+          groups_m[month][week] = 1
+          // groups_m[month][week]['mes'] = 1
+          // groups_m[month][week]['anio'] = 1
+        }
 
         // }
 
-        if (!groups[week]['data'][row.estado]) {
-            groups[week]['data'][row.estado] = 0 // [row.estado] = 0;
+        if (!groups[week]['data'][row.desEstadoActividad]) {
+          groups[week]['data'][row.desEstadoActividad] = 0 // [row.desEstadoActividad] = 0;
 
         }
 
-        groups[week]['data'][row.estado]++;
-        statesSet.add(row.estado);
+        groups[week]['data'][row.desEstadoActividad]++;
+        statesSet.add(row.desEstadoActividad);
       });
 
       // console.log(groups)
@@ -253,9 +306,9 @@ export default {
         // console.log(groups[semana]['periodo'])
         this.graph2_data.push(groups[semana]['periodo'])
 
-        this.uniqueStates.forEach((estado) => {
-          if (groups[semana]['data'][estado] == undefined){
-            groups[semana]['data'][estado] = 0
+        this.uniqueStates.forEach((desEstadoActividad) => {
+          if (groups[semana]['data'][desEstadoActividad] == undefined) {
+            groups[semana]['data'][desEstadoActividad] = 0
           }
 
         });
@@ -267,13 +320,13 @@ export default {
       const groups_months = Object.keys(groups_m).map(key => {
         return {
           title: key.convertToYearAndMonth(),
-          ntitle : key,
+          ntitle: key,
           cols: Object.keys(groups_m[key]).length
         };
       });
 
       const data = {}
-      data['weeks']  = groups
+      data['weeks'] = groups
       data['groups'] = groups_months
 
       console.log('>>>>>>>>> aqui vemos que tal')
@@ -287,63 +340,63 @@ export default {
       const groups = {};
 
       this.rawData.forEach(row => {
-        if (!groups[row.estado]) groups[row.estado] = 0;
+        if (!groups[row.desEstadoActividad]) groups[row.desEstadoActividad] = 0;
 
-        groups[row.estado]++;
+        groups[row.desEstadoActividad]++;
       });
 
       const ordered = {};
 
       // Iteramos sobre cada clave en rawDataColor
       Object.keys(this.rawDataColor).forEach((key) => {
-      if (groups.hasOwnProperty(key)) {
-        ordered[key] = groups[key];
-      }
+        if (groups.hasOwnProperty(key)) {
+          ordered[key] = groups[key];
+        }
       });
 
       return ordered;
 
     },
     barData() {
-    const series = {};
-    const labels = Object.keys(this.groupedByWeek['weeks']);
+      const series = {};
+      const labels = Object.keys(this.groupedByWeek['weeks']);
 
-    labels.forEach(label => {
-      const data = this.groupedByWeek['weeks'][label];
+      labels.forEach(label => {
+        const data = this.groupedByWeek['weeks'][label];
 
-      Object.keys(data['data']).forEach(state => {
-        if (!series[state]) {
-          series[state] = [];
-          series[state]['data']    = [];
-          series[state]['periodo'] = data['periodo'];
-        }
+        Object.keys(data['data']).forEach(state => {
+          if (!series[state]) {
+            series[state] = [];
+            series[state]['data'] = [];
+            series[state]['periodo'] = data['periodo'];
+          }
 
-        series[state]['data'].push(data['data'][state]);
+          series[state]['data'].push(data['data'][state]);
+        });
       });
-    });
 
-    const ordered = {};
+      const ordered = {};
 
-     // Iteramos sobre cada clave en rawDataColor
-     Object.keys(this.rawDataColor).forEach((key) => {
-      if (series.hasOwnProperty(key)) {
-        ordered[key] = series[key];
-      }
-    });
+      // Iteramos sobre cada clave en rawDataColor
+      Object.keys(this.rawDataColor).forEach((key) => {
+        if (series.hasOwnProperty(key)) {
+          ordered[key] = series[key];
+        }
+      });
 
-    const apexSeries = Object.keys(ordered).map(state => ({
-      name: state,
-      periodo : ordered[state]['periodo'],
-      data: ordered[state]['data']
-    }));
+      const apexSeries = Object.keys(ordered).map(state => ({
+        name: state,
+        periodo: ordered[state]['periodo'],
+        data: ordered[state]['data']
+      }));
 
-    console.log(">>>>>>> apexseries del primero ")
-    console.log(apexSeries)
+      console.log(">>>>>>> apexseries del primero ")
+      console.log(apexSeries)
 
-    return {
-      labels,
-      series: apexSeries
-    };
+      return {
+        labels,
+        series: apexSeries
+      };
     },
     barDataByState() {
       return {
@@ -365,19 +418,19 @@ export default {
         colors: this.orderedColors,
 
         plotOptions: {
-              bar: {
-                borderRadius: 2,
-                dataLabels: {
-                  total: {
-                    enabled: true,
-                    style: {
-                      fontSize: '11px',
-                      fontWeight: 900
-                    }
-                  },
-                  position: 'center'
+          bar: {
+            borderRadius: 2,
+            dataLabels: {
+              total: {
+                enabled: true,
+                style: {
+                  fontSize: '11px',
+                  fontWeight: 900
                 }
-              }
+              },
+              position: 'center'
+            }
+          }
         },
         dataLabels: {
           enabled: true
@@ -391,36 +444,28 @@ export default {
           title: {
             text: 'Restricciones',
             style: {
-                    fontSize: '11px',
-                    fontWeight: 700
-                  },
+              fontSize: '11px',
+              fontWeight: 700
+            },
           },
         },
         xaxis: {
           categories: Object.keys(this.groupedByWeek['weeks']),
           group: {
-                  style: {
-                    fontSize: '11px',
-                    fontWeight: 700
-                  },
-                  groups: this.groupedByWeek['groups']
-                },
-          title: {
-            text: 'Semana / Año-Mes',
             style: {
-                    fontSize: '12px',
-                    fontWeight: 700
-                  },
+              fontSize: '11px',
+              fontWeight: 700
+            },
+            groups: this.groupedByWeek['groups']
           },
-
         },
         // title: {
         //   text: "Frontend Test 1 - Stacked Bar Chart",
         // },
         legend: {
-              show: true,
-              position: 'top',
-              offsetY: 40
+          show: true,
+          position: 'top',
+          offsetY: 10
         },
 
         // stroke: {
@@ -442,9 +487,9 @@ export default {
         // }
 
       };
-  },
+    },
 
-  barOptionsByState() {
+    barOptionsByState() {
       return {
         chart: {
           type: 'bar',
@@ -484,65 +529,65 @@ export default {
           title: {
             text: 'Restricciones',
             style: {
-                    fontSize: '11px',
-                    fontWeight: 700
-                  },
+              fontSize: '11px',
+              fontWeight: 700
+            },
           },
         },
         legend: {
-              show: false,
+          show: false,
         },
       };
     },
 
 
-  barDatabyResponsable() {
-    const series = {};
-    const labels = Object.keys(this.groupedByResponsable['responsables']);
+    barDatabyResponsable() {
+      const series = {};
+      const labels = Object.keys(this.groupedByResponsable['responsables']);
 
-    labels.forEach(label => {
-      const data = this.groupedByResponsable['responsables'][label];
+      labels.forEach(label => {
+        const data = this.groupedByResponsable['responsables'][label];
 
-      Object.keys(data['data']).forEach(state => {
-        if (!series[state]) {
-          series[state] = [];
-          series[state]['data']    = [];
-        //   series[state]['periodo'] = data['periodo'];
-        }
+        Object.keys(data['data']).forEach(state => {
+          if (!series[state]) {
+            series[state] = [];
+            series[state]['data'] = [];
+            //   series[state]['periodo'] = data['periodo'];
+          }
 
-        series[state]['data'].push(data['data'][state]);
+          series[state]['data'].push(data['data'][state]);
 
+        });
       });
-    });
 
-    const ordered = {};
+      const ordered = {};
 
-     // Iteramos sobre cada clave en rawDataColor
-     Object.keys(this.rawDataColor).forEach((key) => {
-      if (series.hasOwnProperty(key)) {
-        ordered[key] = series[key];
-      }
-    });
+      // Iteramos sobre cada clave en rawDataColor
+      Object.keys(this.rawDataColor).forEach((key) => {
+        if (series.hasOwnProperty(key)) {
+          ordered[key] = series[key];
+        }
+      });
 
-    const apexSeries = Object.keys(ordered).map(state => ({
-      name: state,
-    //   periodo : ordered[state]['periodo'],
-      data: ordered[state]['data']
-    }));
+      const apexSeries = Object.keys(ordered).map(state => ({
+        name: state,
+        //   periodo : ordered[state]['periodo'],
+        data: ordered[state]['data']
+      }));
 
-    console.log(">> impresion del apexseries ::")
-    console.log(apexSeries)
+      console.log(">> impresion del apexseries ::")
+      console.log(apexSeries)
 
-    return {
-      labels,
-      series: apexSeries
-    };
+      return {
+        labels,
+        series: apexSeries
+      };
 
-  },
+    },
 
 
- barOptions2() {
-    return {
+    barOptions2() {
+      return {
         chart: {
           type: 'bar',
           stacked: true,
@@ -551,20 +596,20 @@ export default {
         colors: this.orderedColors,
 
         plotOptions: {
-              bar: {
-                borderRadius: 2,
-                horizontal: true,
-                dataLabels: {
-                  total: {
-                    enabled: true,
-                    style: {
-                      fontSize: '11px',
-                      fontWeight: 900
-                    }
-                  },
-                  position: 'center'
+          bar: {
+            borderRadius: 2,
+            horizontal: true,
+            dataLabels: {
+              total: {
+                enabled: true,
+                style: {
+                  fontSize: '11px',
+                  fontWeight: 900
                 }
-              }
+              },
+              position: 'center'
+            }
+          }
         },
         dataLabels: {
           enabled: true
@@ -578,9 +623,9 @@ export default {
           title: {
             text: 'Responsables',
             style: {
-                    fontSize: '11px',
-                    fontWeight: 700
-                  },
+              fontSize: '11px',
+              fontWeight: 700
+            },
           },
         },
         xaxis: {
@@ -588,9 +633,9 @@ export default {
           title: {
             text: 'Restricciones',
             style: {
-                    fontSize: '12px',
-                    fontWeight: 700
-                  },
+              fontSize: '12px',
+              fontWeight: 700
+            },
           },
 
         },
@@ -598,9 +643,9 @@ export default {
         //   text: "Frontend Test 1 - Stacked Bar Chart",
         // },
         legend: {
-              show: true,
-              position: 'top',
-              offsetY: 40
+          show: true,
+          position: 'top',
+          offsetY: 10
         },
 
         // stroke: {
@@ -622,12 +667,63 @@ export default {
         // }
 
       };
-  },
+    },
 
 
   },
   methods: {
+    getPendings : async function () {
+      await store.dispatch('get_projects_without_approve').then(res => {
+        if(res.data.estado == true){
+           this.infoProyectos = res.data.datos
+        }
 
+      });
+    },
+    callMounted: async function () {
+      await store.dispatch("get_infoPerson");
+      await store.dispatch("getNameProy").then((response) => {
+        this.nameProyecto = response;
+      });
+      const constraintid = sessionStorage.getItem('constraintid')
+      const constraintNameProy = sessionStorage.getItem('constraintNameProy')
+      this.selectedFilter1 = sessionStorage.getItem('selectedFilter') ? sessionStorage.getItem('selectedFilter') : 0
+      if (!constraintid && !constraintNameProy) {
+        sessionStorage.setItem('constraintid', this.codeproject[this.selectedFilter1])
+        sessionStorage.setItem('constraintNameProy', this.projectList[this.selectedFilter1])
+      }
+      await store.dispatch("get_datos_restricciones").then((response) => {
+      });
+      const resDataForState = this.$store.state.anaEstado
+      const resDataForBars = this.$store.state.whiteproject_rows
+      let states = []
+      resDataForState.forEach(element => {
+        states.push(element.desEstado)
+      });
+      this.states = states
+      let datas = []
+      let responsables = []
+      resDataForBars.forEach(item => {
+        let data = item.listaFase[0].listaRestricciones
+        if (data.length) {
+          data.map(d => {
+            if (responsables.indexOf(d.desUsuarioResponsable) == -1) {
+              responsables.unshift(d.desUsuarioResponsable)
+            }
+            datas.unshift(d)
+          })
+        }
+      })
+      this.rawDataInicial=datas;
+      console.log('aaaaaaaaaaaaa',datas);
+    },
+    async filter1(e) {
+      sessionStorage.setItem('constraintid', this.codeproject[e.target.value])
+      sessionStorage.setItem('constraintNameProy', this.projectList[e.target.value])
+      sessionStorage.setItem('selectedFilter', e.target.value)
+      window.location.reload()
+      this.callMounted()
+    },
     datatimeStyleChange(data) {
       if (data) {
         let datetime = new Date(data);
@@ -644,15 +740,15 @@ export default {
       // Ahora, this.orderedColors contendrá los colores en el orden alfabético de sus claves
       console.log('Colores ordenados:', this.orderedColors);
     },
-    updateFilters(data){
-      this.filterEstado       = data.estado;
-      this.filterPeriodo      = data.periodo;
-      this.filterResponsable  = data.responsable;
+    updateFilters(data) {
+      this.filterEstado = data.desEstadoActividad;
+      this.filterPeriodo = data.periodo;
+      this.filterResponsable = data.desUsuarioResponsable;
     },
-    removeFilters(data){
-      this.filterEstado   = undefined;
-      this.filterPeriodo  = undefined;
-      this.filterResponsable  = undefined;
+    removeFilters(data) {
+      this.filterEstado = undefined;
+      this.filterPeriodo = undefined;
+      this.filterResponsable = undefined;
     },
     updateCharts(label) {
       console.log(label);

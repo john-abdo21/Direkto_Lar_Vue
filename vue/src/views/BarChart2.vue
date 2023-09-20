@@ -3,7 +3,7 @@
 
    <div style="position: relative;" :width="width" >
     <div class="custom-icon">
-      <i class="fa-solid fa-filter-circle-xmark cursor-pointer" v-if="showIcon" @click="removerFiltros"></i>
+      <i class="fa-solid fa-filter-circle-xmark cursor-pointer mr-4" v-if="showIcon" @click="removerFiltros"></i>
     </div>
 
     <apexchart  :width="width" :height="height" type="bar" :options="chartOptions" :series="chartSeries" @dataPointSelection = "onClick" ></apexchart>
@@ -43,16 +43,12 @@ export default {
       // Transforma los datos para que coincidan con el formato de ApexCharts
       // Asume que chartData tiene un campo 'datasets'
       if (this.tipo == 2){
-
-
         return this.chartData.datasets.map((dataset) => ({
           name: dataset.label,
           data: dataset.data,
         }));
 
       }else{
-
-
         const result = this.chartData && this.chartData.series
       ? this.chartData.series.map((dataset) => ({
           name: dataset.name,  // Aquí debería ir el nombre del estado
@@ -61,21 +57,14 @@ export default {
 
         }))
       : [];
-
         console.log("Las series que se pasarán a ApexCharts son:", result);
 
         return result;
-
-
-
-      }
+        }
     },
   },
   methods: {
-
-
     removerFiltros(){
-
       this.showIcon = false;
       this.$emit('removeFilters', {remover:true});
 
@@ -116,7 +105,7 @@ export default {
         selectPeriod      =   undefined
       }
 
-      this.$emit('emitFilters', {estado:selectState , periodo:selectPeriod, responsable:selectResponsable});
+      this.$emit('emitFilters', {desEstadoActividad:selectState , periodo:selectPeriod, responsable:selectResponsable});
 
 
     },
