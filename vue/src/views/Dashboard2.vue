@@ -2,8 +2,8 @@
   <Breadcrumb :paths="['Inicio']" />
   <slot></slot>
   <div>
-  <div class="flex gap-2 text-center">
-    <div class="w-2/12">
+  <div class="flex gap-2 text-center sm:flex-col">
+      <div class="w-2/12 sm:w-full md:w-3/12">
       <div class=" border border-gray-400 py-1 px-2 mb-2">
         Filtros
       </div>
@@ -32,14 +32,15 @@
 
       </div>
     </div>
-    <div class="w-7/12">
+    <div class="w-7/12 sm:w-full md:w-9/12">
       <div class=" border border-gray-400 py-1 px-2">
         Evolucion Semanal de Cant. Restriciones x Estado
       </div>
       <BarChart2 :tipo=1 :chartData="barData" :chartOptions="barOptions" :periodos=graph2_data :filterHidden=filterHidden
         @emitFilters="updateFilters" @removeFilters="removeFilters" :width="'100%'" :height="'200px'" />
     </div>
-    <div class="w-3/12">
+    
+    <div class="w-3/12 sm:w-full md:w-1/>2">
       <div class=" border border-gray-400 py-1 px-2 mb-2">
         Leyenda
       </div>
@@ -75,8 +76,8 @@
 
     </div>
   </div>
-  <div class="flex gap-2 text-center">
-    <div class="w-3/12">
+  <div class="flex gap-2 text-center sm:flex-col">
+      <div class="w-3/12 sm:w-full">
       <div class="border border-gray-400 py-1">
         Cant. Restricciones x Estado
       </div>
@@ -84,16 +85,15 @@
         :filterHidden=filterHidden @emitFilters="updateFilters" @removeFilters="removeFilters" :width="'200'"
         :height="'250px'" />
     </div>
-    <div class="w-5/12">
+    <div class="w-5/12 sm:w-full">
       <div class=" border border-gray-400 py-1 px-2">
         Cant. Restricciones x Responsables x Estado
       </div>
       <BarChart2 :tipo=3 :chartData="barDatabyResponsable" :chartOptions="barOptions2" :periodos=graph2_data
         :filterHidden=filterHidden @emitFilters="updateFilters" @removeFilters="removeFilters" :width="'400'"
         :height="'250px'" />
-
     </div>
-    <div class="w-6/12">
+    <div class="w-full sm:w-full">
       <div class=" border border-gray-400 py-1 px-2">
         Detalle de Restricciones
       </div>
