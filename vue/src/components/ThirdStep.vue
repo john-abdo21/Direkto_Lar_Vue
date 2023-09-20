@@ -310,7 +310,7 @@
               <div
                 v-for="(user, childIndex) in users"
                 :key="childIndex"
-                class="flex sm:flex-col justify-between mb-6 items-center"
+                class="flex sm:flex-col justify-between mb-6 items-center w-[50%]"
                 :class="report.massiveStatus === false ? 'hidden' : ''"
               >
                 <span class="text-base sm:mb-2 sm:w-full"></span>

@@ -17,6 +17,8 @@ use App\Http\Controllers\UtilsController;
 use App\Http\Controllers\ConfController;
 
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\IndicatorsController;
+
 
 
 // header("Access-Control-Allow-Origin: https://direktor.com.pe");
@@ -131,3 +133,7 @@ Route::get('/generar_reporte', [ReportController::class, 'generarReporte']);
 
 
 Route::post('/send_notification' , [NotificationController::class, 'callNotification']);
+Route::post('/get_data_restricciones_indicators' , [IndicatorsController::class, 'get_project_restricciones']);
+Route::post('/get_project_indicators' , [IndicatorsController::class, 'get_project_indicators']);
+
+

@@ -97,6 +97,7 @@ export default {
     ConstraintAnalysis: function(id) {
 
       this.$emit('openConstraintPage', {id: this.row.codProyecto, nameProy: this.row.desnombreproyecto})
+
     }
   },
   directives: {

@@ -41,7 +41,7 @@
           class="text-left text-[0.6rem] px-3 last:rounded-tr-[7px] [&:nth-child(2)]:w-[90px]"
           :class="{
             hidden: tableType === 'scroll' && hideCols.indexOf(key) > -1,
-            '[&:nth-child(2)]:w-28 [&:nth-child(5)]:w-44':
+            '[&:nth-child(2)]:w-28 [&:nth-child(5)]:w-44 ':
               tableType === 'scroll',
             'first:rounded-tl-[7px]': tableType !== 'scroll',
           }"
@@ -181,7 +181,7 @@ export default {
   methods: {
     validamosArray: function () {
 
-      console.log('restrictions',this.restrictions)
+      console.log(this.restrictions)
 
     },
     // mRestrictionData : function (idx) {

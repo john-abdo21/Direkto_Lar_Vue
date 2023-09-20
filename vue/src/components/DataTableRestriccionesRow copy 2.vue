@@ -34,6 +34,8 @@
       <v-date-picker v-if="statusRestriction" @click="verificarCambio({name:'dayFechaRequerida', value: restriction_row.dayFechaRequerida})"  ref="datepicker"  v-model="restriction_row.dayFechaRequerida" mode="date" is24hr: false class="flex relative  cursor-pointer cursor-pointer"  >
           <template v-slot="{ inputValue, inputEvents }" >
             <input
+
+
               class="w-full border border-[#8A9CC9] px-2 text-xs h-8 rounded "
               placeholder="Fecha de inicio*"
               :value="inputValue"

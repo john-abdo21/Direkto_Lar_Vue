@@ -17,6 +17,14 @@
       :settingFlag="true"
     />
 
+    <!-- <div class="h-[25px] w-[60px]">
+      <FlagSelect v-model="valor_defecto" @change="capturamos_veremos" disabled="true" />
+    </div> -->
+
+    <br>
+
+
+
     <div class="flex flex-col">
       <div class="flex justify-start"  v-if="!fullScreen">
 
@@ -31,8 +39,8 @@
               class="flex-1 text-white rounded-lg p-1 shadow-md"
               :class="getBgColor"
           >
-            <h2 class="text-md">Avance General</h2>
-            <h3 class="text-lg">{{indicadorAvanceGeneral}}%</h3>
+            <h2 class="text-sm text-center">Avance General</h2>
+            <h3 class="text-lg text-center">{{indicadorAvanceGeneral}}%</h3>
             <div class="h-2 bg-white mt-2">
             <div
                 class="h-full " v-bind:style="{ width: indicadorAvanceGeneral + '%' }"
@@ -45,11 +53,11 @@
         <!-- Segundo bloque - 2 indicadores en Barra -->
         <div class="space-y-2 w-[12em]">
           <div class="text-xxs flex ">
-            <span class="mr-2 flex-col  ">Tiempo de Anticipacion <b>(Promedio)</b></span>
+            <span class="mr-2 flex-col  ">Tiempo de Anticipacion <b>(Promedio Total)</b></span>
 
             <!-- <span class="ml-2 text-md w-[20px] ws_green400"></span> -->
             <div class="ml-2 text-center">
-            <div class="flex w-11 h-10 flex-none items-center justify-center rounded-lg bg-gray-100 group-hover:bg-white">
+            <div class="flex w-11 h-10 flex-none items-center justify-center rounded-lg bg-gray-100 group-hover:bg-white text-sm">
               {{indicadorAnticipacion}}
 
             </div>
@@ -61,11 +69,11 @@
 
         <div class="space-y-2 w-[12em]">
           <div class="text-xxs flex ">
-            <span class="mr-2 flex-col  ">Tiempo de Cumplimiento <b>(Promedio)</b></span>
+            <span class="mr-2 flex-col  ">Tiempo de Cumplimiento <b>(Promedio Total)</b></span>
 
             <!-- <span class="ml-2 text-md w-[20px] ws_green400"></span> -->
             <div class="ml-2 text-center">
-            <div class="flex w-11 h-10 flex-none items-center justify-center rounded-lg bg-gray-100 group-hover:bg-white">
+            <div class="flex w-11 h-10 flex-none items-center justify-center rounded-lg bg-gray-100 group-hover:bg-white text-sm">
               {{indicadorCumplimiento}}
 
             </div>
@@ -172,13 +180,13 @@
       <div class=" flex  w-[50%] sm:w-full justify-end" v-if="!fullScreen">
         <div class=" flex flex-col w-[60%] sm:w-full space-x-1" v-if="!isDisabled ">
           <div class="flex-1 flex justify-end text-xs ">
-            <button class="px-2 py-1 border border-gray-400 rounded hover:bg-gray-100 w-[35%] h-[30px] text-[0.55rem]" @click="downloadFile">
+            <button class="px-2 py-1 border border-gray-400 rounded hover:bg-gray-100 w-[35%] h-[30px] text-[0.55rem]" @click="download_template_for_project">
               <i class="fas fa-file-download"></i> Descargar Plantilla
             </button>
             <button class="px-2 py-1 border border-gray-400 rounded hover:bg-gray-100 w-[32%] h-[30px] text-[0.55rem]" @click="openModal({ param: 'uploadExcel' })">
               <i class="fas fa-file-upload"></i> Subir Plantilla
             </button>
-            <button class="px-2 py-1 border border-gray-400 rounded hover:bg-gray-100 w-[25%] h-[30px] text-[0.55rem]" @click="downloadReporte">
+            <button class="px-2 py-1 border border-gray-400 rounded hover:bg-gray-100 w-[25%] h-[30px] text-[0.55rem]" @click="download_reporte_for_project">
               <i class="fas fa-file-download"></i> Reporte
             </button>
           </div>
@@ -198,7 +206,7 @@
 
               <transition name="fade">
 
-              <div class="absolute left-0 mt-1 w-full bg-white rounded shadow-lg" v-if="showOptions" ref="dropdown">
+              <div class="absolute left-0 mt-1 w-full bg-white rounded shadow-lg text-[0.8rem]" v-if="showOptions" ref="dropdown">
                 <div v-for="(option, index) in visibleOptions" :key="index" class="px-2 py-1 cursor-pointer mb-2 shadow-sm"  @click="optionClicked(option)">
                   <div class="font-normal flex justify-between">
                     <span>{{option.name}}</span>
@@ -277,7 +285,18 @@
               v-for="(fase, index2) in frente.listaFase"
               :key="index2"
             >
-              <div>
+              <div
+                 :class="{
+                  'border-t-2': index2 === 0,
+                  'border-b-2': !fase.isOpen,
+                  'border-l-2 border-r-2':  1==1,
+                  'rounded-t-lg': index2 === 0,
+                  'rounded-b-lg': !fase.isOpen,
+
+                 }"
+                 class="pl-2 pb-2 pr-2 border-gray-300 sm:w-full cursor-pointer"
+                 @click="toggleOpenFase(frente.codFrente , fase.codFase)"
+              >
                 <span class="text-[0.7rem] leading-7 text-activeText shrink-0">
                   {{ fase.desFase }}
                 </span>
@@ -292,7 +311,14 @@
                 </span>
               </div>
 
-              <div class="mt-6">
+              <div
+                  class=" border-l-2 border-r-2 border-gray-300"
+                  :class = "{
+                     'rounded-b-lg': index2 === frente.listaFase.length - 1,
+
+                  }"
+                  v-if="fase.isOpen"
+              >
                 <div class="flex sm:flex-col justify-between sm:mb-10">
                   <div
                     class="flex mt-1 mb-3 items-start cursor-pointer"
@@ -372,10 +398,10 @@
                       @openModal="openModal"
                       @addRowData="addRowData"
                     >
-                    </DataTableRestricciones>
                       <!-- <template #default="{ tr, id }">
                         <DataTableRestriccionesRow :statusRestriction="statusRestriction"  :listindex="[index1,index2,id]" :restriction_data="tr" :isupdate="tr.isupdate" :frontId="frente.codFrente" :phaseId="fase.codFase" :hideCols="hideCols" | @openModal="openModal" @updateRow = "updateRow" @RegistrarCambioRow = "RegistrarCambioRow"   />
                       </template> -->
+                    </DataTableRestricciones>
                   </div>
                 </div>
               </div>
@@ -543,6 +569,7 @@
 
 <script>
 // import excelParser from "../excel-parser";
+// import { AdjustmentsIcon } from "@vue-hero-icons/solid"
 import moment from 'moment'
 import * as XLSX from "xlsx"
 import FileSaver from 'file-saver';
@@ -567,12 +594,14 @@ import DeleteFront from "../../components/DeleteFront.vue";
 import Loading from "vue-loading-overlay";
 
 import AddRowData from "../../components/AddRowData.vue";
+import FlagSelect from '../../components/FlagSelect.vue';
 
 import store from "../../store";
 import '@fortawesome/fontawesome-free/css/all.css'
 export default {
   name: "white-project-component",
   components: {
+    FlagSelect,
     Loading,
     Breadcrumb,
     AddFront,
@@ -596,6 +625,7 @@ export default {
   },
   data: function () {
     return {
+      valor_defecto:2,
       data_array: [],
       bloqConfirmNotification:false,
       // mensajeNotificaciones: 'Se enviaran '+this.countNotNoti+' Notificaciones',
@@ -635,6 +665,7 @@ export default {
       search: '',
       showOptions: false,
       options: [
+        { name: 'Estado', visible: false ,subOptions: [], showSubOptions: false },
         { name: 'Responsables', visible: false ,subOptions: [], showSubOptions: false },
         { name: 'Solicitantes', visible: false, subOptions: [], showSubOptions: false },
         { name: 'Vencimiento', visible: false , subOptions: [], showSubOptions: false },
@@ -643,10 +674,11 @@ export default {
       anyResults: false,
       selectedFilters: [],
 
-
-
-
       options0: [
+        {
+          name: "Estado",
+          value: "estado",
+        },
         {
           name: "Responsable",
           value: "responsible",
@@ -745,6 +777,11 @@ export default {
   },
   methods: {
 
+    capturamos_veremos(data){
+      console.log(">>>>> entrada")
+      console.log(this.valor_defecto)
+    },
+
     mverificamos(){
       console.log(">> impresion de la var. restricciones")
       console.log(this.restrictions)
@@ -781,12 +818,13 @@ export default {
 
     return conteo;
    },
-   downloadReporte(){
+   download_reporte_for_project(){
 
     store.dispatch("report_restrictions_for_project");
 
    },
-   downloadFile(payload) {
+
+   download_template_for_project(payload) {
     store.dispatch("get_datos_restricciones", payload).then((response) => {
       const Frente = [];
       const Fase = [];
@@ -796,20 +834,24 @@ export default {
       const Solicitante = [];
       for(let i = 0; i < response.restricciones.length; i ++){
         Frente[i] = response.restricciones[i]['desFrente'];
-        Fase[i] = response.restricciones[i]['listaFase'][0]['desFase'];
-        for(let j = 0; j < response.restricciones[i]['listaFase'][0]['listaRestricciones'].length; j ++){
+        if (response.restricciones[i]['listaFase'].length > 0){
 
-          if(response.restricciones[i]['listaFase'][0]['listaRestricciones'][j]['desUsuarioResponsable'] && (!Responsable.includes(response.restricciones[i]['listaFase'][0]['listaRestricciones'][j]['desUsuarioResponsable']))){
-            Responsable.push(response.restricciones[i]['listaFase'][0]['listaRestricciones'][j]['desUsuarioResponsable']);
-          }
+          Fase[i]   = response.restricciones[i]['listaFase'][0]['desFase'];
+
         }
-      } 
+
+      }
       for(let k = 0; k < response.tipoRestricciones.length; k ++){
         TipoRestriccion.push(response.tipoRestricciones[k]['desTipoRestricciones']);
       }
       for (let h = 0; h < response.estados.length; h ++){
         Estado[h] = response.estados[h]['desEstado'];
       }
+
+      for (let h = 0; h < response.integrantesAnaReS.length; h ++){
+        Responsable[h] = response.integrantesAnaReS[h]['desProyIntegrante'];
+      }
+
       Solicitante.push(response.solicitanteActual);
       const data_array = [
         {
@@ -817,11 +859,11 @@ export default {
           "B": Fase,
           "C": "",
           "D": "",
-          "E": TipoRestriccion,  
+          "E": TipoRestriccion,
           "F": "",
           "G": "",
-          "H": Responsable, 
-          "I": Estado, 
+          "H": Responsable,
+          "I": Estado,
           "J": Solicitante
         }
       ];
@@ -830,121 +872,122 @@ export default {
       const ws = workbook.addWorksheet('Restricciones');
       ws.addRow(["Frente", "Fase", "Actividad", "Restriccion", "Tipo Restriccion", "Fecha Requerida", "Fecha Conciliada", "Responsable", "Estado", "Solicitante"]);
       ws.addRow(["", "", "", "", "", "", "", "", "", ""]);
-      
+
       const header_row = ws.getRow(1);
-      header_row.height = 33;
-      
+      header_row.height = 22;
+
 
       const columnA = ws.getColumn('A');
-      columnA.width = 28;
+      columnA.width = 16;
 
       const columnB = ws.getColumn('B');
-      columnB.width = 28;
+      columnB.width = 16;
 
       const columnC = ws.getColumn('C');
-      columnC.width = 28;
+      columnC.width = 12;
 
       const columnD = ws.getColumn('D');
-      columnD.width = 28;
+      columnD.width = 12;
 
       const columnE = ws.getColumn('E');
-      columnE.width = 28;
+      columnE.width = 20;
 
       const columnF = ws.getColumn('F');
-      columnF.width = 28;
+      columnF.width = 16;
 
       const columnG = ws.getColumn('G');
-      columnG.width = 28;
+      columnG.width = 16
 
       const columnH = ws.getColumn('H');
-      columnH.width = 28;
+      columnH.width = 16;
 
       const columnI = ws.getColumn('I');
-      columnI.width = 28;
+      columnI.width = 12;
 
       const columnJ = ws.getColumn('J');
-      columnJ.width = 28;
+      columnJ.width = 14;
+
+
+      const fill_data = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'A5A5A5' },
+      };
+      const font_data =  {
+        color: { argb: '000000', bold: true },
+      };
+      const alignment_data = { vertical: 'middle', horizontal: 'center' };
+      const border_data = {
+                              top: {style:'thin'},
+                              left: {style:'thin'},
+                              bottom: {style:'thin'},
+                              right: {style:'thin'}
+                          };
+
 
       const header_frente = ws.getCell('A1');
-      header_frente.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'A5A5A5' },
-                
-      }
-      header_frente.alignment = { horizontal:'center'};
+      header_frente.fill = fill_data
+      header_frente.font = font_data
+      header_frente.alignment = alignment_data;
+      header_frente.border    = border_data;
 
       const header_Fase = ws.getCell('B1');
-      header_Fase.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'A5A5A5' },
-      }
-      header_Fase.alignment = { horizontal:'center'};
+      header_Fase.fill = fill_data
+      header_Fase.font = font_data
+      header_Fase.alignment = alignment_data;
+      header_Fase.border    = border_data;
 
       const header_Actividad = ws.getCell('C1');
-      header_Actividad.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'A5A5A5' },
-      }
-      header_Actividad.alignment = { horizontal:'center'};
+      header_Actividad.fill = fill_data
+      header_Actividad.font = font_data
+      header_Actividad.alignment = alignment_data;
+      header_Actividad.border    = border_data;
 
       const header_Restriccion = ws.getCell('D1');
-      header_Restriccion.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'A5A5A5' },
-      }
-      header_Restriccion.alignment = { horizontal:'center'};
+      header_Restriccion.fill = fill_data
+      header_Restriccion.font = font_data
+      header_Restriccion.alignment = alignment_data;
+      header_Restriccion.border    = border_data;
+
 
       const header_Tipo = ws.getCell('E1');
-      header_Tipo.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'A5A5A5' },
-      }
-      header_Tipo.alignment = { horizontal:'center'};
+      header_Tipo.fill = fill_data
+      header_Tipo.font = font_data
+      header_Tipo.alignment = alignment_data;
+      header_Tipo.border    = border_data;
 
       const header_FechaR = ws.getCell('F1');
-      header_FechaR.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'A5A5A5' },
-      }
-      header_FechaR.alignment = { horizontal:'center'};
+      header_FechaR.fill = fill_data
+      header_FechaR.font = font_data
+      header_FechaR.alignment = alignment_data;
+      header_FechaR.border    = border_data;
 
       const header_FechaC = ws.getCell('G1');
-      header_FechaC.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'A5A5A5' },
-      }
-      header_FechaC.alignment = { horizontal:'center'};
+      header_FechaC.fill = fill_data
+      header_FechaC.font = font_data
+      header_FechaC.alignment = alignment_data;
+      header_FechaC.border    = border_data;
 
       const header_Responsable = ws.getCell('H1');
-      header_Responsable.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'A5A5A5' },
-      }
-      header_Responsable.alignment = { horizontal:'center'};
+      header_Responsable.fill = fill_data
+      header_Responsable.font = font_data
+      header_Responsable.alignment = alignment_data;
+      header_Responsable.border    = border_data;
 
       const header_Estado = ws.getCell('I1');
-      header_Estado.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'A5A5A5' },
-      }
-      header_Estado.alignment = { horizontal:'center'};
+      header_Estado.fill = fill_data
+      header_Estado.font = font_data
+      header_Estado.alignment = alignment_data;
+      header_Estado.border    = border_data;
 
       const header_Soli = ws.getCell('J1');
-      header_Soli.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'A5A5A5' },
-      }
-      header_Estado.alignment = { horizontal:'center'};
+      header_Soli.fill = fill_data
+      header_Soli.font = font_data
+      header_Soli.alignment = alignment_data;
+      header_Soli.border    = border_data;
+
+
+
 
       for(let i = 2; i < 100; i ++){
         const validationCell_Frente = ws.getCell('A'+`"${i}"`);
@@ -999,9 +1042,9 @@ export default {
       // Save the workbook to a file
       workbook.xlsx.writeBuffer().then(buffer => {
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        FileSaver.saveAs(blob, 'Restricciones_Template.xlsx');
+        FileSaver.saveAs(blob, ('plantilla_'+this.nameProyecto+'.xlsx').toLowerCase());
       });
-      
+
     });
   },
 
@@ -1034,6 +1077,30 @@ export default {
           row.isOpen = !row.isOpen;
         }
       });
+    },
+
+    toggleOpenFase: function (codfrente , codfase) {
+
+      this.rows.map((frente) => {
+
+
+        if (frente.codFrente === codfrente) {
+
+          console.log(frente)
+
+          frente.listaFase.map((fase) => {
+
+            if(fase.codFase === codfase){
+              fase.isOpen  = !fase.isOpen;
+            }
+
+          });
+
+        }
+
+
+      });
+
     },
 
     pruebavalidar: function (payload) {
@@ -1705,79 +1772,143 @@ export default {
     getResponsibleRows(payload) {
       // return this.$store.getters.getResponsibleRows(payload);
       return this.$store.state.whiteproject_rows.map((row) => {
+        const nuevasFases = row.listaFase.map((fase) => {
+          const match = fase.listaRestricciones.some(
+            (restriction) => restriction.idUsuarioResponsable === payload.id
+          );
+
+          return {
+            ...fase,
+            isOpen: match ? true : fase.isOpen,
+            listaRestricciones: fase.listaRestricciones.filter(
+              (restriction) => restriction.idUsuarioResponsable === payload.id
+            ),
+            shouldShow: match, // Agregamos un campo 'shouldShow' para saber si se debe mostrar
+          };
+        }).filter(fase => fase.shouldShow); // Filtramos las fases que no tienen coincidencias
+
         return {
           ...row,
-          listaFase: row.listaFase.map((fase) => {
-            return {
-              ...fase,
-              listaRestricciones: fase.listaRestricciones.filter(
-                (restriction) =>
-                  restriction.idUsuarioResponsable === payload.id
-              ),
-            };
-          }),
+          listaFase: nuevasFases,
+          shouldShow: nuevasFases.length > 0 // Aquí determinamos si la fila debe mostrarse
         };
-      });
+      }).filter(row => row.shouldShow); // Filtramos las filas que no tienen fases coincidentes
+
     },
     getApplicantRows(payload) {
       // return this.$store.getters.getApplicantRows();
       // let applicantId = sessionStorage.getItem("Id");
       return this.$store.state.whiteproject_rows.map((row) => {
+        const nuevasFases = row.listaFase.map((fase) => {
+          const match = fase.listaRestricciones.some(
+            (restriction) => restriction.idUsuarioSolicitante === payload.id
+          );
+
+          return {
+            ...fase,
+            isOpen: match ? true : fase.isOpen,
+            listaRestricciones: fase.listaRestricciones.filter(
+              (restriction) => restriction.idUsuarioSolicitante === payload.id
+            ),
+            shouldShow: match, // Agregamos un campo 'shouldShow' para saber si se debe mostrar
+          };
+        }).filter(fase => fase.shouldShow); // Filtramos las fases que no tienen coincidencias
+
         return {
           ...row,
-          listaFase: row.listaFase.map((fase) => {
-            return {
-              ...fase,
-              listaRestricciones: fase.listaRestricciones.filter(
-                (restriction) =>
-                  restriction.idUsuarioSolicitante === payload.id
-              ),
-            };
-          }),
+          listaFase: nuevasFases,
+          shouldShow: nuevasFases.length > 0 // Aquí determinamos si la fila debe mostrarse
         };
-      });
+      }).filter(row => row.shouldShow); // Filtramos las filas que no tienen fases coincidentes
+
+
     },
     getExpirationRows(payload) {
-      // console.log(payload);
-      // return this.$store.getters.getExpirationRows(payload);
-      let res = this.$store.state.whiteproject_rows.map((row) => {
-        return {
-          ...row,
-          listaFase: row.listaFase.map((fase) => {
-            return {
-              ...fase,
-              listaRestricciones: fase.listaRestricciones.filter(
-                (restriction) =>
-                parseInt(restriction.codEstadoActividad,10) != this.$store.state.anaEstado.find(
+
+      return this.$store.state.whiteproject_rows.map((row) => {
+        const nuevasFases = row.listaFase.map((fase) => {
+          const match = fase.listaRestricciones.some(
+            (restriction) =>  parseInt(restriction.codEstadoActividad,10) != this.$store.state.anaEstado.find(
                       (estado) => estado.desEstado == "Completado"
                     ).codEstado &&
                   new Date(restriction.dayFechaConciliada) < new Date()
-              ),
-            };
-          }),
-        };
-      });
+          );
 
-      return res;
-    },
-    getResTypeRows(payload) {
-      console.log(payload);
-      //return this.$store.getters.getResTypeRows(payload);
-      return this.$store.state.whiteproject_rows.map((row) => {
+          return {
+            ...fase,
+            isOpen: match ? true : fase.isOpen,
+            listaRestricciones: fase.listaRestricciones.filter(
+              (restriction) => parseInt(restriction.codEstadoActividad,10) != this.$store.state.anaEstado.find(
+                      (estado) => estado.desEstado == "Completado"
+                    ).codEstado &&
+                  new Date(restriction.dayFechaConciliada) < new Date()
+            ),
+            shouldShow: match, // Agregamos un campo 'shouldShow' para saber si se debe mostrar
+          };
+        }).filter(fase => fase.shouldShow); // Filtramos las fases que no tienen coincidencias
+
         return {
           ...row,
-          listaFase: row.listaFase.map((fase) => {
-            return {
-              ...fase,
-              listaRestricciones: fase.listaRestricciones.filter(
-                (restriction) =>
-                  restriction.codTipoRestriccion === payload.id
-              ),
-            };
-          }),
+          listaFase: nuevasFases,
+          shouldShow: nuevasFases.length > 0 // Aquí determinamos si la fila debe mostrarse
         };
-      });
+      }).filter(row => row.shouldShow);
+
+
     },
+    getResTypeRows(payload) {
+      // console.log(payload);
+      //return this.$store.getters.getResTypeRows(payload);
+      return this.$store.state.whiteproject_rows.map((row) => {
+        const nuevasFases = row.listaFase.map((fase) => {
+          const match = fase.listaRestricciones.some(
+            (restriction) => parseInt(restriction.codTipoRestriccion) === payload.id
+          );
+
+          return {
+            ...fase,
+            isOpen: match ? true : fase.isOpen,
+            listaRestricciones: fase.listaRestricciones.filter(
+              (restriction) => parseInt(restriction.codTipoRestriccion) === payload.id
+            ),
+            shouldShow: match, // Agregamos un campo 'shouldShow' para saber si se debe mostrar
+          };
+        }).filter(fase => fase.shouldShow); // Filtramos las fases que no tienen coincidencias
+
+        return {
+          ...row,
+          listaFase: nuevasFases,
+          shouldShow: nuevasFases.length > 0 // Aquí determinamos si la fila debe mostrarse
+        };
+      }).filter(row => row.shouldShow); // Filtramos las filas que no tienen fases coincidentes
+    },
+
+    getResEstados(payload) {
+
+      return this.$store.state.whiteproject_rows.map((row) => {
+        const nuevasFases = row.listaFase.map((fase) => {
+          const match = fase.listaRestricciones.some(
+            (restriction) => parseInt(restriction.codEstadoActividad) === payload.id
+          );
+
+          return {
+            ...fase,
+            isOpen: match ? true : fase.isOpen,
+            listaRestricciones: fase.listaRestricciones.filter(
+              (restriction) => parseInt(restriction.codEstadoActividad) === payload.id
+            ),
+            shouldShow: match, // Agregamos un campo 'shouldShow' para saber si se debe mostrar
+          };
+        }).filter(fase => fase.shouldShow); // Filtramos las fases que no tienen coincidencias
+
+        return {
+          ...row,
+          listaFase: nuevasFases,
+          shouldShow: nuevasFases.length > 0 // Aquí determinamos si la fila debe mostrarse
+        };
+      }).filter(row => row.shouldShow); // Filtramos las filas que no tienen fases coincidentes
+    },
+
     countActivities(codFrente) {
       let total = 0;
         let completed = 0;
@@ -1848,6 +1979,7 @@ export default {
 
           this.updateTipoRestricciones();
           this.updateVencimiento();
+          this.updateEstados();
       });
 
       console.log(">> entro 3");
@@ -1924,6 +2056,16 @@ export default {
 
       this.optionSubFilterSelected = subOption ? subOption : option
       this.optionFilterIndex       = subOption.key
+
+      this.rows.map((row) => {
+        // console.log(row);
+        // if (row.desFrente === param) {
+          row.isOpen = true;
+        // }
+      });
+
+      /* Abrimos todos los frentes para que se vea el resultado de los filtros */
+
     },
     removeFilter(index) {
         this.selectedFilters.splice(index, 1);
@@ -1940,6 +2082,7 @@ export default {
 
 
     },
+
     updateTipoRestricciones() {
       let tiporestricciones = this.$store.state.Restrictionlist_P.map(tipos => {
               return { name: tipos.desTipoRestricciones, id: tipos.codTipoRestricciones , key: 3 };
@@ -1948,6 +2091,18 @@ export default {
       const tipoRestriccionesOption = this.options.find(option => option.name === 'Tipo de Restricción');
         if (tipoRestriccionesOption) {
           tipoRestriccionesOption.subOptions = tiporestricciones;
+        }
+
+    },
+
+    updateEstados() {
+      let tipoEstados = this.$store.state.anaEstado.map(estados => {
+              return { name: estados.desEstado, id: estados.codEstado , key: 5 };
+            });
+
+      const estadoOption = this.options.find(option => option.name === 'Estado');
+        if (estadoOption) {
+          estadoOption.subOptions = tipoEstados;
         }
 
     },
@@ -2026,23 +2181,25 @@ export default {
       restriccion.listaFase.forEach((fase) => {
         fase.listaRestricciones.forEach((item) => {
 
-          if (item.dayFechaLevantamiento && item.dayFechaIdentificacion && (this.rolProyecto == 3 || this.rolProyecto == 0)) {
+          // if (item.dayFechaLevantamiento != '' && item.dayFechaRequerida != '' && (this.rolProyecto == 3 || this.rolProyecto == 0)) {
+            if (item.dayFechaLevantamiento != '' && item.dayFechaRequerida != '' && item.codEstadoActividad == "3"){
+
             let fechaLevantamiento = new Date(item.dayFechaLevantamiento);
-            let fechaIdentificacion = new Date(item.dayFechaIdentificacion);
-            let diferenciaDias = Math.round((fechaLevantamiento - fechaIdentificacion) / (1000 * 60 * 60 * 24));
+            let dayFechaRequerida = new Date(item.dayFechaRequerida);
+            let diferenciaDias = Math.round((dayFechaRequerida - fechaLevantamiento) / (1000 * 60 * 60 * 24));
             totalDias += diferenciaDias;
             contador++;
-          }else{
+          // }else{
 
-            if (item.dayFechaLevantamiento && item.dayFechaIdentificacion && item.codAreaRestriccion == this.areaUsuario && !(this.rolProyecto == 3 || this.rolProyecto == 0) ) {
+          //   if (item.dayFechaLevantamiento && item.dayFechaIdentificacion && item.codAreaRestriccion == this.areaUsuario && !(this.rolProyecto == 3 || this.rolProyecto == 0) ) {
 
-              let fechaLevantamiento = new Date(item.dayFechaLevantamiento);
-              let fechaIdentificacion = new Date(item.dayFechaIdentificacion);
-              let diferenciaDias = Math.round((fechaLevantamiento - fechaIdentificacion) / (1000 * 60 * 60 * 24));
-              totalDias += diferenciaDias;
-              contador++;
+          //     let fechaLevantamiento = new Date(item.dayFechaLevantamiento);
+          //     let fechaIdentificacion = new Date(item.dayFechaIdentificacion);
+          //     let diferenciaDias = Math.round((fechaLevantamiento - fechaIdentificacion) / (1000 * 60 * 60 * 24));
+          //     totalDias += diferenciaDias;
+          //     contador++;
 
-            }
+          //   }
           }
         });
       });
@@ -2061,10 +2218,10 @@ export default {
       this.restrictions.forEach((restriccion) => {
         restriccion.listaFase.forEach((fase) => {
           fase.listaRestricciones.forEach((item) => {
-            if (item.dayFechaLevantamiento && item.dayFechaIdentificacion) {
-              let fechaLevantamiento = new Date(item.dayFechaLevantamiento);
+            if (item.dayFechaRequerida  !="" && item.dayFechaIdentificacion != "") {
+              let dayFechaRequerida = new Date(item.dayFechaRequerida);
               let fechaIdentificacion = new Date(item.dayFechaIdentificacion);
-              let diferenciaDias = Math.round((fechaLevantamiento - fechaIdentificacion) / (1000 * 60 * 60 * 24));
+              let diferenciaDias = Math.round((dayFechaRequerida - fechaIdentificacion) / (1000 * 60 * 60 * 24));
               totalDias += diferenciaDias;
               contador++;
             }
@@ -2172,8 +2329,12 @@ export default {
           case 3:
             // console.log(">>>> entrando a la restriccion");
             return this.getResTypeRows(this.optionSubFilterSelected );
-
             break;
+          case 5:
+          // console.log(">>>> entrando a la restriccion");
+            return this.getResEstados(this.optionSubFilterSelected );
+            break;
+
           default:
             return [];
             break;

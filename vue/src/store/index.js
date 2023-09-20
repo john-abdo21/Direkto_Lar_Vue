@@ -653,10 +653,12 @@ const store = createStore({
       })
     },
     get_datos_restricciones({commit}){
+      // let id = sessionStorage.getItem('Id');
       const anaresdata = { id: sessionStorage.getItem('constraintid') , codsuser: sessionStorage.getItem('Id') }
       // const anaresdata = 107;
       return axiosClient.post('get_data_restricciones', anaresdata)
         .then(res => {
+          //console.log(res.data);
         commit('setAnaResData', res.data.restricciones)
         commit('Set_Restriction', res.data.tipoRestricciones)
         commit('setAreaIntegrante', res.data.areaIntegrante)
@@ -672,8 +674,7 @@ const store = createStore({
           commit('setColOcultas', res.data.columnasOcultas)
 
         }
-      console.log('res.data',res.data);
-      return(res.data)
+        return(res.data)
       })
     },
     report_restrictions_for_project({commit}){

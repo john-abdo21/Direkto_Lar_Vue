@@ -23,9 +23,9 @@
                   @keyup="verificarCambio({name:'desActividad', value: restriction_data.desActividad});"
                   v-model="restriction_data.desActividad"
                   type="text"
-                  class="mt-1.5 w-full text-[0.6rem] border border-[#8A9CC9] px-1 h-6 rounded resizable-textarea"
+                  class="mt-1.5 w-full text-[0.6rem] border  px-1 h-6 rounded resizable-textarea"
 
-                  :class="{'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction, 'text-[0.6rem]': !INIstateRestriction }"
+                  :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1), 'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction, 'text-[0.6rem]': !INIstateRestriction }"
                   @input="updateHeight1"
                   :style="{ lineHeight: 'initial', height: autoSize1 + 'px'}"
             >
@@ -37,8 +37,8 @@
                   ref="exercise"
                   name="exercise"
                   type="text"
-                  class="mt-1.5 w-full text-[0.6rem] border border-[#8A9CC9] px-1 h-6 rounded resizable-textarea"
-                  :class="{'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
+                  class="mt-1.5 w-full text-[0.6rem] border  px-1 h-6 rounded resizable-textarea"
+                  :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1), 'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
                   @input="updateHeight1"
                   :style="{ lineHeight: 'initial', height: autoSize1 + 'px'}"
 
@@ -54,7 +54,7 @@
                   v-model="restriction_data.desRestriccion"
                   type="text"
                   class="w-full text-[0.6rem] border border-[#8A9CC9] px-2 h-6 rounded resizable-textarea"
-                  :class="{'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
+                  :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1),'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
                   :style="{ marginTop: '5px', lineHeight: 'initial', height: autoSize2 + 'px'}"
                   @input="updateHeight2"
             >
@@ -68,7 +68,7 @@
                   name="restriction"
                   type="text"
                   class="w-full text-[0.6rem] border border-[#8A9CC9] px-2 h-6 rounded resizable-textarea"
-                  :class="{'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
+                  :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1),'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
                   :style="{ marginTop: '5px', lineHeight: 'initial', height: autoSize2 + 'px'}"
                   @input="updateHeight2"
 
@@ -82,7 +82,7 @@
             v-if="INItipo && restriction_data.codEstadoActividad < 3"
             v-model="restriction_data.codTipoRestriccion"
             class="text-[0.6rem] w-full  border border-[#8A9CC9] pr-5 px-2 h-6 rounded  selectPer"
-            :class="{'bg-gray-100': !INItipo , 'text-gray-700': !INItipo  }"
+            :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1),'bg-gray-100': !INItipo , 'text-gray-700': !INItipo  }"
             @change="verificarCambio({name:'codTipoRestriccion', value: restriction_data.codTipoRestriccion, change: $event });"
           >
 
@@ -99,7 +99,7 @@
                  :value="restriction_data.desTipoRestriccion"
                  type="text"
                  class="w-full border border-[#8A9CC9] pr-5 px-2 text-[0.6rem] h-6  rounded"
-                 :class="{'bg-gray-100': !INItipo , 'text-gray-700': !INItipo }" />
+                 :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1),'bg-gray-100': !INItipo , 'text-gray-700': !INItipo }" />
 
 
           </td>
@@ -114,7 +114,7 @@
              v-model="restriction_data.dayFechaRequerida"
              type="date"
              class="text-[0.6rem] w-full border border-[#8A9CC9] px-2 h-6 rounded"
-             :class="{'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
+             :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1),'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
             />
 
             <input
@@ -124,7 +124,7 @@
 
              :value="formated_val(restriction_data.dayFechaRequerida)"
              type="text" class="w-full border border-[#8A9CC9] px-2 text-[0.6rem] h-6  rounded"
-             :class="{
+             :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1),
                           'bg-gray-100': !INIstateRestriction ,
                           'text-gray-700': !INIstateRestriction,
 
@@ -142,7 +142,7 @@
                     v-model="restriction_data.dayFechaConciliada"
                     type="date"
                     class="text-[0.6rem] w-full border border-[#8A9CC9] px-2 h-6 rounded"
-                    :class="{'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
+                    :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1),'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
               />
 
               <input
@@ -152,7 +152,7 @@
                     :value=formated_val(restriction_data.dayFechaConciliada)
                     type="text"
                     class="w-full border border-[#8A9CC9] px-2 text-[0.6rem] h-6  rounded"
-                    :class="{'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
+                    :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1),'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
               />
 
 
@@ -166,7 +166,7 @@
                     :value="formated_val(restriction_data.dayFechaIdentificacion)"
                     type="text"
                     class="w-full border border-[#8A9CC9] px-2 text-[0.6rem] h-6  rounded"
-                    :class="{'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
+                    :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1),'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
               />
 
           </td>
@@ -177,7 +177,7 @@
             name="responsible"
             v-model="restriction_data.idUsuarioResponsable"
             class="text-[0.6rem] w-full  border border-[#8A9CC9] pr-5 px-2 h-6 rounded selectPer"
-            :class="{'bg-gray-100': !INIresponsable , 'text-gray-700': !INIresponsable  }"
+            :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1),'bg-gray-100': !INIresponsable , 'text-gray-700': !INIresponsable  }"
             @change="verificarCambio({name:'idUsuarioResponsable', value: restriction_data.idUsuarioResponsable})"
             >
 
@@ -195,16 +195,32 @@
               :value="restriction_data.desUsuarioResponsable"
               type="text"
               class="w-full border border-[#8A9CC9] pr-5 px-2 text-[0.6rem] h-6  rounded"
-              :class="{'bg-gray-100': !INIresponsable , 'text-gray-700': !INIresponsable  }"
+              :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1),'bg-gray-100': !INIresponsable , 'text-gray-700': !INIresponsable  }"
           />
 
           </td>
 
-          <td class="downExcel" :class="{'hidden': hideCols.indexOf('responsible_area') > -1}" ><input name="responsible_area" type="text" :value="restriction_data.desAreaResponsable" readonly class="w-full border  px-2 text-[0.6rem] h-6  rounded"/></td>
+          <td class="downExcel" :class="{'hidden': hideCols.indexOf('responsible_area') > -1}" >
+            <input name="responsible_area" type="text"
+            :value="restriction_data.desAreaResponsable"
+            readonly class="w-full border  px-2 text-[0.6rem] h-6  rounded"
+            :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1)}"
+            />
+          </td>
 
           <td class="downExcel" :class="{'hidden': hideCols.indexOf('condition') > -1}">
 
-            <select
+            <FlagSelect
+             v-if="INIstateRestriction"
+             name="condition"
+             v-model="restriction_data.codEstadoActividad"
+             :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1),'bg-gray-100,text-gray-700': !INIstateRestriction }"
+             @change="verificarCambio({name:'codEstadoActividad', value: restriction_data.codEstadoActividad})"
+             class=""
+
+             />
+
+            <!-- <select
               v-if="INIstateRestriction"
               name="condition"
               v-model="restriction_data.codEstadoActividad"
@@ -219,8 +235,19 @@
                 v-bind:value = "item.value"
               >{{ item.name }}
               </option>
-            </select>
-            <input
+            </select> -->
+
+            <FlagSelect
+             v-if="!INIstateRestriction"
+             name="condition"
+             :disabled="true"
+             v-model="restriction_data.codEstadoActividad"
+             :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1),'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
+             @change="verificarCambio({name:'codEstadoActividad', value: restriction_data.codEstadoActividad})"
+
+             />
+
+            <!-- <input
                   v-if="!INIstateRestriction"
                   name="condition"
                   :disabled="true"
@@ -228,12 +255,17 @@
                   type="text"
                   class="w-full pr-5 border border-[#8A9CC9] px-2 text-[0.6rem] h-6  rounded"
                   :class="{'bg-gray-100': !INIstateRestriction , 'text-gray-700': !INIstateRestriction  }"
-            />
+            /> -->
 
           </td>
 
           <td class="downExcel" :class="{'hidden': hideCols.indexOf('applicant') > -1}">
-            <input name="applicant" type="text" :value="restriction_data.desUsuarioSolicitante" readonly class="w-full border px-2 text-[0.6rem] h-6  rounded"/>
+            <input
+               name="applicant" type="text"
+               :value="restriction_data.desUsuarioSolicitante"
+               readonly class="w-full border px-2 text-[0.6rem] h-6  rounded"
+               :class="{'border-[#3ac189]': (restriction_data.codEstadoActividad == 3),'border-[#e56b37]': (restriction_data.codEstadoActividad == 2),'border-[#ccc]': (restriction_data.codEstadoActividad == 1)}"
+               />
           </td>
         </tr>
 
@@ -244,6 +276,7 @@ import draggable from "vuedraggable";
 import TableTooltip from "./TableTooltip.vue";
 import ClickOutside from "vue-click-outside";
 import SelectOption from "./SelectOption.vue";
+import FlagSelect from './FlagSelect.vue';
 import moment from 'moment'
 import "../assets/css/reset_datatable.css"
 
@@ -252,7 +285,8 @@ export default {
   components: {
     draggable,
     TableTooltip,
-    SelectOption
+    SelectOption,
+    FlagSelect
   },
   props: {
     rolProyecto:Number,
@@ -296,6 +330,10 @@ export default {
     }
   },
   methods:{
+
+    updatedColorBorder(){
+
+    },
 
     formated_val(date) {
       if (date) {
@@ -596,6 +634,14 @@ export default {
   },
 
   computed: {
+
+
+    borderColorComp(){
+      return this.restriction_data.codEstadoActividad == 1 ? '#ccc' : (this.restriction_data.codEstadoActividad == 2 ? '#e56b37': '#3ac189')
+
+    },
+
+
 
     INIresponsable(){
 
