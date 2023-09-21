@@ -510,6 +510,26 @@ export default {
         //     colors: ['#cccccc', '#e56b37', '#3ac189']
         //   }
         // },
+        responsive: [
+             {
+               breakpoint: 1280,
+               options: {
+                 chart: {
+                   width:  '100%',
+                   height: 250,
+                 },
+               },
+             },
+             {
+               breakpoint: 0,
+               options: {
+                 chart: {
+                   width: 200,
+                   height: 300,
+                 },
+               },
+             },
+           ],
         grid: {
           row: {
             colors: ["#fff", "#f2f2f2"]
@@ -594,7 +614,26 @@ export default {
         },
 
         colors: this.orderedColors,
-
+        responsive: [
+          {
+            breakpoint: 1280,
+            options: {
+              chart: {
+                width: '100%',
+                height: 250,
+              },
+            },
+          },
+          {
+            breakpoint: 0,
+            options: {
+              chart: {
+                width: '400',
+                height: 250,
+              },
+            },
+          },
+        ],
         plotOptions: {
           bar: {
             borderRadius: 2,
