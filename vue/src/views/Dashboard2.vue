@@ -3,8 +3,8 @@
   <slot></slot>
   <div>
   <div class="flex gap-2 text-center flex-col xl:flex-row">
-      <div class="w-2/12 sm:w-full md:w-full">
-      <div class=" border border-gray-400 py-1 px-2 mb-2">
+    <div class="w-2/12">
+      <div class=" border border-gray-400 py-1 px-2 mb-2 mb-8">
         Filtros
       </div>
       <div class="text-[14px] font-thin text-left">
@@ -32,15 +32,16 @@
 
       </div>
     </div>
-    <div class="w-7/12 sm:w-full md:w-full">
-      <div class=" border border-gray-400 py-1 px-2">
+
+    <div class="w-7/12">
+      <div class=" border border-gray-400 py-1 px-2 mb-8">
         Evolucion Semanal de Cant. Restriciones x Estado
       </div>
       <BarChart2 :tipo=1 :chartData="barData" :chartOptions="barOptions" :periodos=graph2_data :filterHidden=filterHidden
         @emitFilters="updateFilters" @removeFilters="removeFilters" :width="'100%'" :height="'200px'" />
     </div>
     
-    <div class="w-3/12 sm:w-full md:w-full">
+    <div class="w-3/12">
       <div class=" border border-gray-400 py-1 px-2 mb-2">
         Leyenda
       </div>
@@ -77,23 +78,23 @@
     </div>
   </div>
   <div class="flex gap-2 text-center flex-col xl:flex-row mt-8">
-    <div class="w-3/12 sm:w-full md:w-full">
-      <div class="border border-gray-400 py-1">
+    <div class="w-2/12 ">
+      <div class="border border-gray-400 py-1 mb-8">
         Cant. Restricciones x Estado
       </div>
       <BarChart2 :tipo=2 :chartData="barDataByState" :chartOptions="barOptionsByState" :periodos=[]
         :filterHidden=filterHidden @emitFilters="updateFilters" @removeFilters="removeFilters" :width="'200'"
         :height="'250px'" />
     </div>
-    <div class="w-5/12 sm:w-full md:w-full">
-      <div class=" border border-gray-400 py-1 px-2">
+    <div class="w-4/12 ">
+      <div class=" border border-gray-400 py-1 px-2 mb-8">
         Cant. Restricciones x Responsables x Estado
       </div>
       <BarChart2 :tipo=3 :chartData="barDatabyResponsable" :chartOptions="barOptions2" :periodos=graph2_data
         :filterHidden=filterHidden @emitFilters="updateFilters" @removeFilters="removeFilters" :width="'400'"
         :height="'250px'" />
     </div>
-    <div class="w-full sm:w-full">
+    <div class="w-6/12 ">
       <div class=" border border-gray-400 py-1 px-2">
         Detalle de Restricciones
       </div>
