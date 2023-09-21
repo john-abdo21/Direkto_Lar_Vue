@@ -87,12 +87,12 @@ var routes = [
   },
   {
     path: "/",
-    redirect: "/home",
+    redirect: "/indicadores",
     component: DefaultLayout,
     meta: { requiresAuth: true },
     children: [
       {
-        path: "/home",
+        path: "/indicadores",
         name: "Home",
         component: Home,
         meta: { layout: 'home', sidebarOpen: true },
@@ -106,7 +106,7 @@ var routes = [
       {
         path: "/indicadores",
         name: "RestrictionsIndicators",
-        component: RestrictionsIndicators,
+        component: Home,
         meta: { layout: 'home' , sidebarOpen: true},
         // children:[
 

@@ -2,7 +2,7 @@
   <Breadcrumb :paths="['Inicio']" />
   <slot></slot>
   <div>
-  <div class="flex gap-2 text-center sm:flex-col">
+  <div class="flex gap-2 text-center flex-col xl:flex-row">
       <div class="w-2/12 sm:w-full md:w-3/12">
       <div class=" border border-gray-400 py-1 px-2 mb-2">
         Filtros
@@ -32,7 +32,7 @@
 
       </div>
     </div>
-    <div class="w-7/12 sm:w-full md:w-9/12">
+    <div class="w-7/12 sm:w-full md:w-full">
       <div class=" border border-gray-400 py-1 px-2">
         Evolucion Semanal de Cant. Restriciones x Estado
       </div>
@@ -40,7 +40,7 @@
         @emitFilters="updateFilters" @removeFilters="removeFilters" :width="'100%'" :height="'200px'" />
     </div>
     
-    <div class="w-3/12 sm:w-full md:w-1/>2">
+    <div class="w-3/12 sm:w-full md:w-full">
       <div class=" border border-gray-400 py-1 px-2 mb-2">
         Leyenda
       </div>
@@ -76,8 +76,8 @@
 
     </div>
   </div>
-  <div class="flex gap-2 text-center sm:flex-col">
-      <div class="w-3/12 sm:w-full">
+  <div class="flex gap-2 text-center flex-col xl:flex-row mt-8">
+    <div class="w-3/12 sm:w-full md:w-full">
       <div class="border border-gray-400 py-1">
         Cant. Restricciones x Estado
       </div>
@@ -85,7 +85,7 @@
         :filterHidden=filterHidden @emitFilters="updateFilters" @removeFilters="removeFilters" :width="'200'"
         :height="'250px'" />
     </div>
-    <div class="w-5/12 sm:w-full">
+    <div class="w-5/12 sm:w-full md:w-full">
       <div class=" border border-gray-400 py-1 px-2">
         Cant. Restricciones x Responsables x Estado
       </div>

@@ -1,6 +1,6 @@
 <template>
    <Breadcrumb
-      :paths="['Inicio', 'Dashboard']"
+      :paths="['Inicio', 'Analisis de restricciones', 'Indicadores']"
       :urls ="['home']"
       :settingFlag="false"
       :class="status === 4 ? 'hidden' : 'm-1'"
