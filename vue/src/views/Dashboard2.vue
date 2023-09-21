@@ -721,7 +721,6 @@ export default {
       sessionStorage.setItem('constraintid', this.codeproject[e.target.value])
       sessionStorage.setItem('constraintNameProy', this.projectList[e.target.value])
       sessionStorage.setItem('selectedFilter', e.target.value)
-      window.location.reload()
       this.callMounted()
     },
     datatimeStyleChange(data) {
