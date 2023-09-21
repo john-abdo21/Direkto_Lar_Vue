@@ -32,3 +32,10 @@
     align-items: center;
     justify-content: center;
 }
+
+@media (max-width: 750px){
+    .sm\:content-phoneLogo {
+        --tw-content: url(src/assets/logo.png) !important;
+        content: var(--tw-content);
+    }
+}

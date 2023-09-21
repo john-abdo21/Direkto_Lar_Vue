@@ -31,6 +31,7 @@ module.exports = {
         side: "#E5EBFB",
         activeText: "#212530",
         inactiveText: "#616E8E",
+        smbackcolor: '#F6F8FE'
       },
       boxShadow: {
         'tooltip': '0px 4px 16px rgba(23, 71, 194, 0.18)',
